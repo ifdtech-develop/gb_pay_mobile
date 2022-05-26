@@ -6,7 +6,7 @@ import 'package:dartz/dartz.dart';
 import 'package:device_information/device_information.dart';
 import 'package:gb_pay_mobile/src/constants/single.dart';
 import 'package:gb_pay_mobile/src/domain/entity/user_entity.dart';
-import 'package:gb_pay_mobile/src/ui/token/token_screen.dart';
+import 'package:gb_pay_mobile/src/features/token/pages/token_screen.dart';
 import 'package:gb_pay_mobile/src/util/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:macadress_gen/macadress_gen.dart';

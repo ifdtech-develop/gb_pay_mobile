@@ -16,10 +16,10 @@ import 'package:gb_pay_mobile/src/infra/data/data_source/remote/app_remote_data_
 import 'package:gb_pay_mobile/src/infra/domain/repository/app_postagem_repository.dart';
 import 'package:gb_pay_mobile/src/infra/domain/repository/app_user_repository.dart';
 import 'package:gb_pay_mobile/src/service/local_storage_service.dart';
-import 'package:gb_pay_mobile/src/ui/feed/feed_cubit.dart';
-import 'package:gb_pay_mobile/src/ui/signin/signin_cubit.dart';
-import 'package:gb_pay_mobile/src/ui/signup/signup_cubit.dart';
-import 'package:gb_pay_mobile/src/ui/splash/splash_cubit.dart';
+import 'package:gb_pay_mobile/src/features/feed/feed_cubit.dart';
+import 'package:gb_pay_mobile/src/features/signin/signin_cubit.dart';
+import 'package:gb_pay_mobile/src/features/signup/signup_cubit.dart';
+import 'package:gb_pay_mobile/src/features/splash/splash_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_storage/get_storage.dart';
 

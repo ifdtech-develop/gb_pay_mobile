@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/dto/post_dto.dart';
-import '../ui/feed/feed_cubit.dart';
+import '../features/feed/feed_cubit.dart';
 import 'fennec_colorful_button.dart';
 
 class FeedNovaPostagem extends StatelessWidget {
