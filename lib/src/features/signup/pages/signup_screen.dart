@@ -35,15 +35,14 @@ class _SignupScreenState extends State<SignupScreen> {
 
   final PageController _pageController = PageController();
 
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _documentController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _birthDateController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _identityController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _documentController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _birthDateController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _identityController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
 
   final ValueNotifier<SignupPages> _currentPage =
       ValueNotifier(SignupPages.fullName);
@@ -300,7 +299,7 @@ class _SignupScreenState extends State<SignupScreen> {
   };
 
   bool currentPageHasError(SignupPages current, SignupState state) {
-    print("erro $current");
+    //print("erro $current");
     final currentError = pagesErrors[current]?.call(state);
     return currentError ?? false;
   }
@@ -351,8 +350,7 @@ class _SignupScreenState extends State<SignupScreen> {
             inputMask: [
               TextInputMask(
                 mask: '00/00/0000',
-                placeholder: ' ',
-                maxPlaceHolders: 10,
+                maxLength: 11,
               ),
             ],
             controller: _birthDateController,
@@ -368,7 +366,7 @@ class _SignupScreenState extends State<SignupScreen> {
               TextInputMask(
                 mask: '(00) 00000-0000',
                 placeholder: ' ',
-                maxPlaceHolders: 15,
+                maxLength: 15,
               ),
             ],
             controller: _phoneController,

@@ -92,7 +92,7 @@ class SignupCubit extends Cubit<SignupState> {
       emit(
         state.copyWith(
           birthDate: '',
-          birthDateError: 'Sobrenome obrigatório',
+          birthDateError: 'Data obrigatória',
         ),
       );
       return;
