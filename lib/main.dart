@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gb_pay_mobile/src/constants/routes.dart';
 import 'package:gb_pay_mobile/src/di/app_injector.dart';
 import 'package:gb_pay_mobile/src/di/injector.dart';
-import 'package:gb_pay_mobile/src/ui/not_found/not_found_screen.dart';
+import 'package:gb_pay_mobile/src/features/not_found/pages/not_found_screen.dart';
 import 'package:gb_pay_mobile/src/util/colors.dart';
 import 'package:gb_pay_mobile/src/util/global_context.dart';
 import 'package:gb_pay_mobile/src/util/service_location.dart';

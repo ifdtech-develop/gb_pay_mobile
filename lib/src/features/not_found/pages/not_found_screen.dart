@@ -1,3 +1,4 @@
+import 'package:gb_pay_mobile/src/features/not_found/pages/not_found_sceen.text.dart';
 import 'package:gb_pay_mobile/src/util/screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class NotFoundScreen extends StatelessWidget with Screen {
           children: [
             const Center(
               child: Text(
-                '404',
+                NotFoundScreenText.errorCode,
                 style: TextStyle(
                   fontSize: 56,
                 ),
@@ -25,7 +26,9 @@ class NotFoundScreen extends StatelessWidget with Screen {
             ),
             Center(
               child: CupertinoButton.filled(
-                child: const Text('Voltar'),
+                child: const Text(
+                  NotFoundScreenText.backOption,
+                ),
                 onPressed: () => navigator.pop(),
               ),
             ),

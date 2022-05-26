@@ -1,6 +1,7 @@
 import 'package:gb_pay_mobile/src/component/fennec_colorful_button.dart';
 import 'package:gb_pay_mobile/src/constants/routes.dart';
 import 'package:gb_pay_mobile/src/domain/entity/user_entity.dart';
+import 'package:gb_pay_mobile/src/features/home/pages/home_screen.text.dart';
 import 'package:gb_pay_mobile/src/util/screen.dart';
 import 'package:gb_pay_mobile/src/util/service_location.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> get texts => [
         'Olá, ${widget.user.name.split(' ').first},',
         //'Olá,',
-        'Obrigado por se cadastrar!',
-        'Bem vindo à Fennec ;)'
+        HomeScreenText.welmoce,
+        HomeScreenText.welmoceSub,
       ];
 
   final textList = ValueNotifier<List<Widget>>(
@@ -39,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       addNewText();
     });
   }
@@ -61,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 locator<NavigationService>();
             _navigationService.navigateTo(AppRouteNames.greetings);
           },
-          titulo: "Realizar Login");
+          titulo: HomeScreenText.title);
       setState(() {});
     }
   }

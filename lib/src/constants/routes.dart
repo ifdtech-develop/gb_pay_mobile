@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:gb_pay_mobile/src/domain/entity/user_entity.dart';
-import 'package:gb_pay_mobile/src/ui/features/pagamento/pages/tela_pagamento.dart';
-import 'package:gb_pay_mobile/src/ui/feed/feed_screen.dart';
-import 'package:gb_pay_mobile/src/ui/greetings/greetings_screen.dart';
-import 'package:gb_pay_mobile/src/ui/home/home_lscreen.dart';
-import 'package:gb_pay_mobile/src/ui/home/home_screen.dart';
-import 'package:gb_pay_mobile/src/ui/signin/signin_screen.dart';
-import 'package:gb_pay_mobile/src/ui/signup/signup_screen.dart';
-import 'package:gb_pay_mobile/src/ui/splash/splash_screen.dart';
-import 'package:gb_pay_mobile/src/ui/token/token_screen.dart';
+import 'package:gb_pay_mobile/src/features/payment/pages/payment_screen.dart';
+import 'package:gb_pay_mobile/src/features/feed/pages/feed_screen.dart';
+import 'package:gb_pay_mobile/src/features/greetings/pages/greetings_screen.dart';
+import 'package:gb_pay_mobile/src/features/home/home_lscreen.dart';
+import 'package:gb_pay_mobile/src/features/home/pages/home_screen.dart';
+import 'package:gb_pay_mobile/src/features/signin/pages/signin_screen.dart';
+import 'package:gb_pay_mobile/src/features/signup/pages/signup_screen.dart';
+import 'package:gb_pay_mobile/src/features/splash/pages/splash_screen.dart';
+import 'package:gb_pay_mobile/src/features/token/pages/token_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppRouteNames {

@@ -7,7 +7,7 @@ import 'package:gb_pay_mobile/src/di/injector.dart';
 import 'package:gb_pay_mobile/src/domain/entity/postagem_entity.dart';
 import 'package:gb_pay_mobile/src/domain/entity/user_entity.dart';
 import 'package:gb_pay_mobile/src/domain/entity/usuario_entity.dart';
-import 'package:gb_pay_mobile/src/ui/feed/feed_cubit.dart';
+import 'package:gb_pay_mobile/src/features/feed/feed_cubit.dart';
 import 'package:gb_pay_mobile/src/util/assets.dart';
 import 'package:gb_pay_mobile/src/util/constants.dart';
 import 'package:gb_pay_mobile/src/util/screen.dart';

@@ -1,68 +1,74 @@
 import 'package:easy_mask/easy_mask.dart';
 import 'package:gb_pay_mobile/src/component/fennec_text_field.dart';
 import 'package:gb_pay_mobile/src/constants/routes.dart';
+import 'package:gb_pay_mobile/src/constants/single.dart';
 import 'package:gb_pay_mobile/src/data/model/totp/totp_model.dart';
 import 'package:gb_pay_mobile/src/di/injector.dart';
-import 'package:gb_pay_mobile/src/ui/signup/signup_cubit.dart';
-import 'package:gb_pay_mobile/src/ui/token/token_screen.dart';
+import 'package:gb_pay_mobile/src/features/signin/pages/signin_screen.text.dart';
+import 'package:gb_pay_mobile/src/features/signin/signin_cubit.dart';
 import 'package:gb_pay_mobile/src/util/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:platform_device_id/platform_device_id.dart';
 
-enum SignupPages {
-  fullName,
-  //document,
+enum SigninPages {
   email,
-  birthDate,
-  phoneNumber,
-  //identity,
   password,
-  confirmPassword,
 }
 
-class SignupScreen extends StatefulWidget with Screen {
-  SignupScreen({Key? key}) : super(key: key);
+class SigninScreen extends StatefulWidget with Screen {
+  SigninScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  State<SigninScreen> createState() => _SigninScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
-  final SignupCubit _cubit = injection();
+class _SigninScreenState extends State<SigninScreen> {
+  final SigninCubit _cubit = injection();
 
   final PageController _pageController = PageController();
-
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _documentController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _birthDateController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _identityController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
 
-  final ValueNotifier<SignupPages> _currentPage =
-      ValueNotifier(SignupPages.fullName);
+  final ValueNotifier<SigninPages> _currentPage =
+      ValueNotifier(SigninPages.email);
 
   @override
   void initState() {
     super.initState();
     _pageController.addListener(() {
       if (_pageController.hasClients) {
-        _currentPage.value = SignupPages.values[_pageController.page!.toInt()];
+        _currentPage.value = SigninPages.values[_pageController.page!.toInt()];
       }
     });
   }
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SignupCubit, SignupState>(
+    return BlocConsumer<SigninCubit, SigninState>(
         listener: (context, state) {
+          final s = Singleton;
           if (state.user != null) {
+            TotpRest totp = TotpRest(
+                name: s.nome, tell: _emailController.text, email: s.email);
+            print('email: ${s.email}');
+            //  final metodod = totp.metodo(imei);
+            String login = _emailController.text;
+            login = login.replaceAll('.', '');
+            login = login.replaceAll('-', '');
+            login = login.replaceAll('(', '');
+            login = login.replaceAll(')', '');
+            login = login.replaceAll(' ', '');
+            login = login.replaceAll('+', '');
+            totp.fetchTotpDTO(login, s.nome, s.email);
             widget.navigator.pushReplacementNamed(
-              AppRouteNames.home,
+              AppRouteNames.paymentpage,
               arguments: state.user,
             );
             return;
@@ -108,8 +114,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               builder: (_, currentPageValue, child) {
                                 return IconButton(
                                   onPressed: () {
-                                    if (currentPageValue ==
-                                        SignupPages.fullName) {
+                                    if (currentPageValue == SigninPages.email) {
                                       widget.navigator.pop();
                                     } else {
                                       _pageController.previousPage(
@@ -141,22 +146,22 @@ class _SignupScreenState extends State<SignupScreen> {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: SizedBox(
-                      height: widget.media.size.height * .09,
-                      child: ValueListenableBuilder<SignupPages>(
+                      height: 56,
+                      child: ValueListenableBuilder<SigninPages>(
                         valueListenable: _currentPage,
                         builder: (context, currentPage, child) {
                           final page = currentPage.index;
                           final hasError =
                               currentPageHasError(currentPage, state);
                           final isNotLastPage =
-                              page < SignupPages.values.length - 1;
+                              page < SigninPages.values.length - 1;
                           return BottomButton(
                             hasError: hasError,
                             label: !isNotLastPage ? 'Concluir' : 'Continuar',
                             onTap: () async {
                               if (!hasError) {
-                                FocusScope.of(context).unfocus();
                                 if (isNotLastPage) {
+                                  FocusScope.of(context).unfocus();
                                   await _pageController
                                       .nextPage(
                                         duration:
@@ -168,24 +173,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                             FocusScope.of(context).nextFocus(),
                                       );
                                 } else {
-                                  print("Chegou na ultima página");
-                                  _cubit.signupUser();
-                                  TotpRest totp = TotpRest(
-                                      name: _nameController.text,
-                                      tell: _phoneController.text);
-                                  //  final metodod = totp.metodo(imei);
-                                  String login = _phoneController.text;
-                                  String cpf = _documentController.text;
-                                  login = login.replaceAll('.', '');
-                                  login = login.replaceAll('-', '');
-                                  login = login.replaceAll('(', '');
-                                  login = login.replaceAll(')', '');
-                                  login = login.replaceAll(' ', '');
-                                  login = login.replaceAll('+', '');
-                                  cpf = cpf.replaceAll('.', '');
-                                  cpf = cpf.replaceAll('-', '');
-                                  totp.fetchTotpDTO(login, _nameController.text,
-                                      _emailController.text);
+                                  _cubit.login();
                                 }
                               }
                             },
@@ -211,7 +199,6 @@ class _SignupScreenState extends State<SignupScreen> {
     String? error,
     TextEditingController? controller,
     bool obscure = false,
-    bool autofocus = false,
   }) {
     return SizedBox(
       child: Column(
@@ -241,7 +228,7 @@ class _SignupScreenState extends State<SignupScreen> {
             inputType: inputType,
             formatters: inputMask,
             error: error,
-            autofocus: autofocus,
+            autofocus: true,
             obscured: obscure,
             controller: controller,
           )
@@ -250,141 +237,44 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  final Map<SignupPages, bool Function(SignupState)> pagesErrors = {
-    SignupPages.fullName: (state) =>
-        state.name.isEmpty ||
-        (state.nameError != null && state.nameError!.isNotEmpty),
-    /*SignupPages.document: (state) =>
-        state.document.isEmpty ||
-        (state.documentError != null && state.documentError!.isNotEmpty),*/
-    SignupPages.email: (state) =>
-        state.email.isEmpty ||
-        (state.emailError != null && state.emailError!.isNotEmpty),
-    SignupPages.birthDate: (state) =>
-        state.birthDate.isEmpty ||
-        (state.birthDateError != null && state.birthDateError!.isNotEmpty),
-    SignupPages.phoneNumber: (state) =>
+  final Map<SigninPages, bool Function(SigninState)> pagesErrors = {
+    SigninPages.email: (state) =>
         state.phone.isEmpty ||
         (state.phoneError != null && state.phoneError!.isNotEmpty),
-    /*SignupPages.identity: (state) =>
-        state.identity.isEmpty ||
-        (state.identityError != null && state.identityError!.isNotEmpty),*/
-    SignupPages.password: (state) =>
+    SigninPages.password: (state) =>
         state.password.isEmpty ||
         (state.passwordError != null && state.passwordError!.isNotEmpty),
-    SignupPages.confirmPassword: (state) =>
-        state.confirmPassword.isEmpty ||
-        (state.confirmPasswordError != null &&
-            state.confirmPasswordError!.isNotEmpty),
   };
 
-  bool currentPageHasError(SignupPages current, SignupState state) {
-    print("erro $current");
+  bool currentPageHasError(SigninPages current, SigninState state) {
     final currentError = pagesErrors[current]?.call(state);
     return currentError ?? false;
   }
 
-  Widget getPageView(SignupState state) => PageView(
+  Widget getPageView(SigninState state) => PageView(
         scrollDirection: Axis.horizontal,
         controller: _pageController,
         allowImplicitScrolling: false,
         physics: const NeverScrollableScrollPhysics(),
         children: [
           getPage(
-            title:
-                'Boas-vindas a GB Pay! Para começar, qual o seu nome completo?',
-            subtitle: 'Precisamos dele para dar início ao seu cadastro.',
-            onChanged: _cubit.setName,
-            value: state.name,
-            error: state.nameError,
-            controller: _nameController,
-            autofocus: true,
-          ),
-          /*getPage(
-            title: 'Qual é o seu CPF?',
-            subtitle: 'Ele usado como sua principal identificação no Fennec.',
-            onChanged: _cubit.setDocument,
-            value: state.document,
-            error: state.documentError,
-            inputMask: [
-              TextInputMask(mask: '999.999.999-99'),
-            ],
-            inputType: TextInputType.number,
-            controller: _documentController,
-          ),*/
-          getPage(
-            title: 'Qual é o seu e-mail pessoal?',
-            subtitle:
-                'Ele será usado como a principal forma de comunicação do Fennec com você.',
-            onChanged: _cubit.setEmail,
-            value: state.email,
-            error: state.emailError,
-            inputType: TextInputType.emailAddress,
-            controller: _emailController,
-          ),
-          getPage(
-            title: 'Qual é a sua data de nascimento?',
-            subtitle:
-                'Essa informação é para sabermos um pouco mais de você e te mandarmos mimos.',
-            onChanged: _cubit.setBirthDate,
-            value: state.birthDate,
-            error: state.birthDateError,
-            inputType: TextInputType.number,
-            inputMask: [
-              TextInputMask(
-                mask: '99/99/9999',
-                placeholder: ' ',
-                maxPlaceHolders: 10,
-              ),
-            ],
-            controller: _birthDateController,
-          ),
-          getPage(
-            title: 'Alô! qual o número do seu celular?',
-            subtitle:
-                'Essa informação vai nos ajudar a validarmos o seu celular.',
+            title: SigninScreenText.title,
             onChanged: _cubit.setPhone,
             value: state.phone,
             error: state.phoneError,
             inputType: TextInputType.number,
             inputMask: [
-              TextInputMask(
-                mask: '(99) 99999-9999',
-                placeholder: ' ',
-                maxPlaceHolders: 15,
-              ),
+              TextInputMask(mask: '(99) 99999-9999'),
             ],
-            controller: _phoneController,
+            controller: _emailController,
           ),
-          /*
           getPage(
-            title: 'Qual é a sua identidade?',
-            onChanged: _cubit.setIdentity,
-            value: state.identity,
-            error: state.identityError,
-            inputType: TextInputType.number,
-            inputMask: [
-              TextInputMask(
-                mask: '99.999.999-9',
-              ),
-            ],
-            controller: _identityController,
-          ),*/
-          getPage(
-            title: 'Senha',
+            title: SigninScreenText.enterPass,
             onChanged: _cubit.setPassword,
             value: state.password,
             error: state.passwordError,
             obscure: true,
             controller: _passwordController,
-          ),
-          getPage(
-            title: 'Confirmar Senha',
-            onChanged: _cubit.setConfirmPassword,
-            value: state.confirmPassword,
-            error: state.confirmPasswordError,
-            obscure: true,
-            controller: _confirmPasswordController,
           ),
         ],
       );
@@ -420,7 +310,7 @@ class BottomButton extends StatelessWidget with Screen {
           border: Border(
             top: BorderSide(
               color: hasError ? grey : colors.primary,
-              width: 1.5,
+              width: 1,
             ),
           ),
         ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gb_pay_mobile/src/domain/entity/user_entity.dart';
-import 'package:gb_pay_mobile/src/ui/features/pagamento/pages/tela_pagamento.text.dart';
+import 'package:gb_pay_mobile/src/features/payment/pages/payment_screen.text.dart';
 import 'package:gb_pay_mobile/src/util/assets.dart';
 import 'package:gb_pay_mobile/src/util/colors.dart';
 

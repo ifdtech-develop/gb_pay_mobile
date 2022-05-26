@@ -4,6 +4,7 @@ import 'package:gb_pay_mobile/src/constants/routes.dart';
 import 'package:gb_pay_mobile/src/constants/single.dart';
 import 'package:gb_pay_mobile/src/domain/repository/user_repository.dart';
 import 'package:gb_pay_mobile/src/domain/use_case/device_user_use_case.dart';
+import 'package:gb_pay_mobile/src/features/greetings/pages/greetings_screen.text.dart';
 import 'package:gb_pay_mobile/src/infra/domain/repository/app_user_repository.dart';
 import 'package:gb_pay_mobile/src/util/assets.dart';
 import 'package:gb_pay_mobile/src/util/screen.dart';
@@ -48,21 +49,21 @@ class GreetingsScreen extends StatelessWidget with Screen {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     FennecPrimaryButton(
-                      label: 'Começar',
+                      label: GreetingsScreenText.start,
                       onPressed: () {
                         navigator.pushNamed(AppRouteNames.signup);
                       },
                     ),
                     const SizedBox(height: 16),
                     FennecPrimaryButton(
-                      label: 'Entrar na minha conta',
+                      label: GreetingsScreenText.enterAccount,
                       onPressed: () {
                         navigator.pushNamed(AppRouteNames.signin);
                       },
                     ),
                     const SizedBox(height: 16),
                     FennecSecondaryButton(
-                      label: 'Token',
+                      label: GreetingsScreenText.token,
                       onPressed: () {
                         navigator.pushNamed(AppRouteNames.token);
                       },

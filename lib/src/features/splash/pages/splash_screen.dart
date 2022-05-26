@@ -1,6 +1,6 @@
 import 'package:gb_pay_mobile/src/constants/routes.dart';
 import 'package:gb_pay_mobile/src/di/injector.dart';
-import 'package:gb_pay_mobile/src/ui/splash/splash_cubit.dart';
+import 'package:gb_pay_mobile/src/features/splash/splash_cubit.dart';
 import 'package:gb_pay_mobile/src/util/assets.dart';
 import 'package:gb_pay_mobile/src/util/screen.dart';
 import 'package:flutter/material.dart';
