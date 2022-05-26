@@ -52,7 +52,7 @@ class _SignupScreenState extends State<SignupScreen> {
     super.initState();
     _pageController.addListener(() {
       if (_pageController.hasClients) {
-        SchedulerBinding.instance!.addPostFrameCallback(
+        SchedulerBinding.instance.addPostFrameCallback(
           (_) {
             _currentPage.value =
                 SignupPages.values[_pageController.page!.toInt()];
@@ -71,8 +71,8 @@ class _SignupScreenState extends State<SignupScreen> {
     _phoneController.dispose();
     _identityController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
     _pageController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
