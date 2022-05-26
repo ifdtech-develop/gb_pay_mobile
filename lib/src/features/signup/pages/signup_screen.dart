@@ -1,4 +1,5 @@
 import 'package:easy_mask/easy_mask.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:gb_pay_mobile/src/component/fennec_text_field.dart';
 import 'package:gb_pay_mobile/src/constants/routes.dart';
 import 'package:gb_pay_mobile/src/data/model/totp/totp_model.dart';
@@ -52,7 +53,12 @@ class _SignupScreenState extends State<SignupScreen> {
     super.initState();
     _pageController.addListener(() {
       if (_pageController.hasClients) {
-        _currentPage.value = SignupPages.values[_pageController.page!.toInt()];
+        SchedulerBinding.instance!.addPostFrameCallback(
+          (_) {
+            _currentPage.value =
+                SignupPages.values[_pageController.page!.toInt()];
+          },
+        );
       }
     });
   }
@@ -67,6 +73,7 @@ class _SignupScreenState extends State<SignupScreen> {
     _identityController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
