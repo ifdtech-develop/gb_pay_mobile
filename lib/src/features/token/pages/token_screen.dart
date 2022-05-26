@@ -1,10 +1,8 @@
-import 'dart:math';
-
+import 'package:flutter/material.dart';
 import 'package:gb_pay_mobile/src/component/fennec_colorful_button.dart';
 import 'package:gb_pay_mobile/src/data/model/totp/totp_model.dart';
 import 'package:gb_pay_mobile/src/domain/entity/user_entity.dart';
 import 'package:gb_pay_mobile/src/util/screen.dart';
-import 'package:flutter/material.dart';
 
 class TokenScreen extends StatefulWidget with Screen {
   TokenScreen({Key? key}) : super(key: key);
@@ -66,7 +64,7 @@ class _TokenScreenState extends State<TokenScreen>
         ColorTween(begin: widget.colors.primary, end: widget.colors.secondary)
             .animate(_animationController);
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       _animationController.forward();
     });
   }
