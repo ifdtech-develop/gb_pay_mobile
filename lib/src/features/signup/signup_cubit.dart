@@ -2,6 +2,7 @@ import 'package:gb_pay_mobile/src/domain/entity/user_entity.dart';
 import 'package:gb_pay_mobile/src/domain/use_case/create_user_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:gb_pay_mobile/src/features/signup/util_date.dart';
 
 part 'signup_cubit.freezed.dart';
 
@@ -88,7 +89,9 @@ class SignupCubit extends Cubit<SignupState> {
   }
 
   void setBirthDate(String? birthDate) {
-    if (birthDate == null || birthDate.trim().isEmpty) {
+    if (birthDate == null ||
+        birthDate.trim().isEmpty ||
+        isBirthDateValid(birthDate)) {
       emit(
         state.copyWith(
           birthDate: '',

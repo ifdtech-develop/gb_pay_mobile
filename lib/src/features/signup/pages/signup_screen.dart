@@ -6,6 +6,7 @@ import 'package:gb_pay_mobile/src/data/model/totp/totp_model.dart';
 import 'package:gb_pay_mobile/src/di/injector.dart';
 import 'package:gb_pay_mobile/src/features/signup/pages/signup_screen.text.dart';
 import 'package:gb_pay_mobile/src/features/signup/signup_cubit.dart';
+import 'package:gb_pay_mobile/src/features/signup/util_date.dart';
 import 'package:gb_pay_mobile/src/features/token/pages/token_screen.dart';
 import 'package:gb_pay_mobile/src/util/screen.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,7 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController _identityController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
+  late bool birthDateValid = false;
 
   final ValueNotifier<SignupPages> _currentPage =
       ValueNotifier(SignupPages.fullName);
@@ -51,19 +53,20 @@ class _SignupScreenState extends State<SignupScreen> {
   void initState() {
     super.initState();
     _pageController.addListener(() {
-      if (_pageController.hasClients) {
-        SchedulerBinding.instance.addPostFrameCallback(
-          (_) {
+      SchedulerBinding.instance.addPostFrameCallback(
+        (_) {
+          if (_pageController.hasClients) {
             _currentPage.value =
                 SignupPages.values[_pageController.page!.toInt()];
-          },
-        );
-      }
+          }
+        },
+      );
     });
   }
 
   @override
   void dispose() {
+    _currentPage.dispose();
     _nameController.dispose();
     _documentController.dispose();
     _emailController.dispose();

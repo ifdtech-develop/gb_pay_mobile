@@ -9,7 +9,8 @@ mixin Screen on Widget {
 
   final ColorScheme colors = AppColors().colors;
 
-  NavigatorState get navigator => Navigator.of(_context.context!);
+  NavigatorState get navigator =>
+      Navigator.of(_context.context!, rootNavigator: true);
 
   MediaQueryData get media => MediaQuery.of(_context.context!);
 
