@@ -6,7 +6,6 @@ import 'package:gb_pay_mobile/src/data/model/totp/totp_model.dart';
 import 'package:gb_pay_mobile/src/di/injector.dart';
 import 'package:gb_pay_mobile/src/features/signup/pages/signup_screen.text.dart';
 import 'package:gb_pay_mobile/src/features/signup/signup_cubit.dart';
-import 'package:gb_pay_mobile/src/features/signup/util_date.dart';
 import 'package:gb_pay_mobile/src/features/token/pages/token_screen.dart';
 import 'package:gb_pay_mobile/src/util/screen.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +52,7 @@ class _SignupScreenState extends State<SignupScreen> {
   void initState() {
     super.initState();
     _pageController.addListener(() {
-      SchedulerBinding.instance.addPostFrameCallback(
+      SchedulerBinding.instance?.addPostFrameCallback(
         (_) {
           if (_pageController.hasClients) {
             _currentPage.value =
@@ -68,11 +67,11 @@ class _SignupScreenState extends State<SignupScreen> {
   void dispose() {
     _currentPage.dispose();
     _nameController.dispose();
-    _documentController.dispose();
+    // _documentController.dispose();
     _emailController.dispose();
     _birthDateController.dispose();
     _phoneController.dispose();
-    _identityController.dispose();
+    // _identityController.dispose();
     _passwordController.dispose();
     _pageController.dispose();
     _confirmPasswordController.dispose();
