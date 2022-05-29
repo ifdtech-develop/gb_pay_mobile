@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gb_pay_mobile/src/constants/routes.dart';
 import 'package:gb_pay_mobile/src/features/credit_card/pages/credit_card_screen.text.dart';
 import 'package:gb_pay_mobile/src/util/colors.dart';
+import 'package:gb_pay_mobile/src/util/screen.dart';
 
-class CreditCardScreen extends StatefulWidget {
-  const CreditCardScreen({Key? key}) : super(key: key);
+class CreditCardScreen extends StatefulWidget with Screen {
+  CreditCardScreen({Key? key}) : super(key: key);
 
   @override
   State<CreditCardScreen> createState() => _CreditCardScreenState();
@@ -125,7 +127,9 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
               width: MediaQuery.of(context).size.width,
               height: 60.0,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  widget.navigator.pushNamed(AppRouteNames.paymentLocation);
+                },
                 child: const Text(
                   'Continuar',
                   style: TextStyle(fontSize: 28.0),
