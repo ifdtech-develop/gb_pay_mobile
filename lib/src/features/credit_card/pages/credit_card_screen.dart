@@ -123,7 +123,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width,
-              height: 70.0,
+              height: 60.0,
               child: ElevatedButton(
                 onPressed: () {},
                 child: const Text(
