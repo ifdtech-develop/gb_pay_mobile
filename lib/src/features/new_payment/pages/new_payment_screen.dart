@@ -38,21 +38,20 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text(
+        title: const Text(
           'Novo Pagamento',
           style: TextStyle(
-            fontSize: 24.0,
+            fontSize: 30.0,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
-        leading: BackButton(
-          color: ColorsProject.blueWhite,
-        ),
+        centerTitle: true,
+        toolbarHeight: 100,
+        iconTheme: IconThemeData(color: ColorsProject.blueWhite, size: 40.0),
         actions: [
           Padding(
             padding: const EdgeInsets.only(
@@ -82,7 +81,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
   Widget get _payAccount {
     return Padding(
       padding: const EdgeInsets.only(
-        top: 144.0,
+        // top: 144.0,
         left: 40.0,
       ),
       child: Row(
@@ -107,12 +106,13 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
               left: 16.0,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Pagar conta',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 16.0,
+                    fontSize: 25.0,
                   ),
                 ),
                 Padding(
@@ -124,7 +124,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
                     style: TextStyle(
                       color: ColorsProject.green,
                       fontWeight: FontWeight.bold,
-                      fontSize: 24.0,
+                      fontSize: 25.0,
                     ),
                   ),
                 ),
@@ -147,8 +147,9 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
         children: [
           Column(
             children: [
-              Image.asset(
-                AppAssets.cardIcon,
+              Icon(
+                Icons.credit_card,
+                color: ColorsProject.blueWhite,
               ),
             ],
           ),
@@ -167,16 +168,16 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
                     'Parcelamento:',
                     style: TextStyle(
                       color: ColorsProject.whiteSilver,
-                      fontSize: 10.0,
+                      fontSize: 20.0,
                     ),
                   ),
                 ),
-                Text(
+                const Text(
                   '2x de R\$ 5,51',
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.normal,
-                    fontSize: 10.0,
+                    fontSize: 20.0,
                   ),
                 ),
               ],
@@ -193,6 +194,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
                   icon: Image.asset(
                     AppAssets.arrowIcon,
                   ),
+                  iconSize: 20.0,
                 ),
               ],
             ),
@@ -204,98 +206,102 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
 
   Widget get _checkBox {
     return SizedBox(
-      width: 355.0,
+      width: MediaQuery.of(context).size.width * 0.8,
       child: Column(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Checkbox(
-                checkColor: Colors.white,
-                value: _checkToday,
-                shape: CircleBorder(),
-                onChanged: (bool? value) {
-                  setState(() {
-                    _checkToday = value!;
-                  });
-                },
+              Row(
+                children: [
+                  Checkbox(
+                    checkColor: Colors.white,
+                    value: _checkToday,
+                    shape: CircleBorder(),
+                    onChanged: (bool? value) {
+                      setState(() {
+                        _checkToday = value!;
+                      });
+                    },
+                  ),
+                  const Text(
+                    'Pagar hoje',
+                    style: TextStyle(fontSize: 25.0),
+                  ),
+                ],
               ),
-              Text('Pagar hoje'),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 160.0,
-                ),
-                child: Text(DateFormat("dd/MM/yyyy").format(data)),
+              Text(
+                DateFormat("dd/MM/yyyy").format(data),
+                style: const TextStyle(fontSize: 20.0),
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              bottom: 2.0,
-            ),
-            child: Row(
-              children: [
-                Checkbox(
-                  checkColor: Colors.white,
-                  value: _checkOther,
-                  shape: CircleBorder(),
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _checkOther = value!;
-                    });
-                  },
-                ),
-                Text('Ágendar'),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 160.0,
-                  ),
-                  child: TextButton(
-                    child: Text(
-                      'Escolher data',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: ColorsProject.blueWhite,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                    onPressed: () {
-                      Future<void> _selectDate(BuildContext context) async {
-                        final DateTime? picked = await showDatePicker(
-                          builder: ((context, child) {
-                            return Theme(
-                              data: Theme.of(context).copyWith(
-                                colorScheme: ColorScheme.light(
-                                  primary: ColorsProject
-                                      .blueWhite, // header background color
-                                  onPrimary: Colors.black, // header text color
-                                  onSurface: Colors.black, // body text color
-                                ),
-                                textButtonTheme: TextButtonThemeData(
-                                  style: TextButton.styleFrom(
-                                    primary: Colors.black, // button text color
-                                  ),
-                                ),
-                              ),
-                              child: child!,
-                            );
-                          }),
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(2030),
-                        );
-                        if (picked != null && picked != data) {
-                          setState(() {
-                            data = picked;
-                          });
-                        }
-                      }
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Checkbox(
+                    checkColor: Colors.white,
+                    value: _checkOther,
+                    shape: CircleBorder(),
+                    onChanged: (bool? value) {
+                      setState(() {
+                        _checkOther = value!;
+                      });
                     },
                   ),
+                  const Text(
+                    'Agendar',
+                    style: TextStyle(fontSize: 25.0),
+                  ),
+                ],
+              ),
+              TextButton(
+                child: Text(
+                  'Escolher data',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: ColorsProject.blueWhite,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.normal,
+                  ),
                 ),
-              ],
-            ),
+                onPressed: () {
+                  Future<void> _selectDate(BuildContext context) async {
+                    final DateTime? picked = await showDatePicker(
+                      builder: ((context, child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            colorScheme: ColorScheme.light(
+                              primary: ColorsProject
+                                  .blueWhite, // header background color
+                              onPrimary: Colors.black, // header text color
+                              onSurface: Colors.black, // body text color
+                            ),
+                            textButtonTheme: TextButtonThemeData(
+                              style: TextButton.styleFrom(
+                                primary: Colors.black, // button text color
+                              ),
+                            ),
+                          ),
+                          child: child!,
+                        );
+                      }),
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1990),
+                      lastDate: DateTime(2030),
+                    );
+                    if (picked != null && picked != data) {
+                      setState(() {
+                        data = picked;
+                      });
+                    }
+                  }
+                },
+              ),
+            ],
           )
         ],
       ),
@@ -319,17 +325,17 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
   Widget infoPage(String info, dynamic infoSupply) {
     return Padding(
       padding: const EdgeInsets.only(
-        top: 12.0,
+        top: 25.0,
       ),
       child: SizedBox(
-        width: 315.0,
+        width: MediaQuery.of(context).size.width * 0.8,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '$info',
+              info,
               style: TextStyle(
-                fontSize: 14.0,
+                fontSize: 23.0,
                 color: ColorsProject.whiteSilver,
                 fontWeight: FontWeight.normal,
               ),
@@ -337,7 +343,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
             Text(
               '$infoSupply',
               style: TextStyle(
-                fontSize: 14.0,
+                fontSize: 18.0,
                 color: ColorsProject.whiteSilver,
                 fontWeight: FontWeight.bold,
               ),
@@ -350,7 +356,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
 
   Widget get _divider {
     return Container(
-      width: 330.0,
+      width: MediaQuery.of(context).size.width * 0.8,
       height: 1.0,
       color: ColorsProject.whiteSilver,
     );
