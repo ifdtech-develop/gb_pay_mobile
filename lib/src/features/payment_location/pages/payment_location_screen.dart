@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:gb_pay_mobile/src/features/credit_card/pages/credit_card_screen.text.dart';
+import 'package:gb_pay_mobile/src/constants/routes.dart';
 import 'package:gb_pay_mobile/src/features/payment_location/pages/payment_location_screen.text.dart';
 import 'package:gb_pay_mobile/src/util/colors.dart';
+import 'package:gb_pay_mobile/src/util/screen.dart';
 
-class PaymentLocationScreen extends StatefulWidget {
-  const PaymentLocationScreen({Key? key}) : super(key: key);
+class PaymentLocationScreen extends StatefulWidget with Screen {
+  PaymentLocationScreen({Key? key}) : super(key: key);
 
   @override
   State<PaymentLocationScreen> createState() => _PaymentLocationScreenState();
@@ -65,12 +66,12 @@ class _PaymentLocationScreenState extends State<PaymentLocationScreen> {
                     contentPadding: const EdgeInsets.all(5.0),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: ColorsProject.greyLow,
+                        color: ColorsProject.strongGrey,
                       ),
                     ),
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: ColorsProject.greyLow,
+                        color: ColorsProject.strongGrey,
                       ),
                     ),
                   ),
@@ -122,7 +123,9 @@ class _PaymentLocationScreenState extends State<PaymentLocationScreen> {
               width: MediaQuery.of(context).size.width,
               height: 60.0,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  widget.navigator.pushNamed(AppRouteNames.receipt);
+                },
                 child: const Text(
                   'Pagar',
                   style: TextStyle(fontSize: 28.0),
@@ -162,7 +165,7 @@ class FormInputs extends StatelessWidget {
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: ColorsProject.greyLow,
+                color: ColorsProject.strongGrey,
               ),
             ),
             // Border quando usuario clica no input

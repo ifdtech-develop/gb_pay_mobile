@@ -58,12 +58,12 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                     contentPadding: const EdgeInsets.all(5.0),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: ColorsProject.greyLow,
+                        color: ColorsProject.strongGrey,
                       ),
                     ),
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: ColorsProject.greyLow,
+                        color: ColorsProject.strongGrey,
                       ),
                     ),
                   ),
@@ -175,7 +175,7 @@ class FormInputs extends StatelessWidget {
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: ColorsProject.greyLow,
+                color: ColorsProject.strongGrey,
               ),
             ),
             // Border quando usuario clica no input

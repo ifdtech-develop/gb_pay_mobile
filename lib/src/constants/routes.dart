@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:gb_pay_mobile/src/domain/entity/user_entity.dart';
+import 'package:gb_pay_mobile/src/features/credit_card/pages/credit_card_screen.dart';
 import 'package:gb_pay_mobile/src/features/payment/pages/payment_screen.dart';
 import 'package:gb_pay_mobile/src/features/feed/pages/feed_screen.dart';
 import 'package:gb_pay_mobile/src/features/greetings/pages/greetings_screen.dart';
 import 'package:gb_pay_mobile/src/features/home/home_lscreen.dart';
 import 'package:gb_pay_mobile/src/features/home/pages/home_screen.dart';
+import 'package:gb_pay_mobile/src/features/payment_location/pages/payment_location_screen.dart';
+import 'package:gb_pay_mobile/src/features/receipt/pages/receipt_screen.dart';
 import 'package:gb_pay_mobile/src/features/signin/pages/signin_screen.dart';
 import 'package:gb_pay_mobile/src/features/signup/pages/signup_screen.dart';
 import 'package:gb_pay_mobile/src/features/splash/pages/splash_screen.dart';
@@ -22,6 +25,9 @@ class AppRouteNames {
   static const String homel = '/homel';
   static const String feed = '/feed';
   static const String paymentpage = '/paymentpage';
+  static const String creditcard = '/creditcard';
+  static const String paymentLocation = '/paymentLocation';
+  static const String receipt = '/receipt';
 }
 
 class AppRoutes {
@@ -43,5 +49,8 @@ class AppRoutes {
     AppRouteNames.paymentpage: (args) => PaymentPage(
           user: args as UserEntity,
         ),
+    AppRouteNames.creditcard: (_) => CreditCardScreen(),
+    AppRouteNames.paymentLocation: (_) => PaymentLocationScreen(),
+    AppRouteNames.receipt: (_) => ReceiptScreen(),
   };
 }
