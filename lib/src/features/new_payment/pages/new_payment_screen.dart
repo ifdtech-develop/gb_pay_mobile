@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:gb_pay_mobile/src/constants/routes.dart';
 import 'package:gb_pay_mobile/src/util/colors.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
@@ -66,13 +67,19 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
         ],
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _payAccount,
-          _cardParcel,
-          _divider,
-          _checkBox,
-          _divider,
-          _mountInfoPage,
+          Column(
+            children: [
+              _payAccount,
+              _cardParcel,
+              _divider,
+              _checkBox,
+              _divider,
+              _mountInfoPage,
+            ],
+          ),
+          _continueButton
         ],
       ),
     );
@@ -359,6 +366,33 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
       width: MediaQuery.of(context).size.width * 0.8,
       height: 1.0,
       color: ColorsProject.whiteSilver,
+    );
+  }
+
+  Widget get _continueButton {
+    return SizedBox(
+      width: 330.0,
+      height: 60.0,
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.pushNamed(context, AppRouteNames.creditcard);
+        },
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6.0),
+          ),
+          primary: ColorsProject.blueWhite,
+          elevation: 0,
+        ),
+        child: const Text(
+          'Próximo',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 28.0,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+      ),
     );
   }
 }

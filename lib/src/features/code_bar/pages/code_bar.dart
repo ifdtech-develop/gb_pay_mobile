@@ -225,10 +225,10 @@ class _CodeBarPageState extends State<CodeBarPage> {
           primary: ColorsProject.blueWhite,
           elevation: 0,
         ),
-        child: Text(
+        child: const Text(
           CodeBarText.nextButton,
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 28.0,
             fontWeight: FontWeight.normal,
           ),
