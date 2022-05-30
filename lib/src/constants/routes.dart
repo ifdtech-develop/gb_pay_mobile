@@ -1,18 +1,16 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:gb_pay_mobile/src/domain/entity/user_entity.dart';
-import 'package:gb_pay_mobile/src/features/code_bar/pages/code_bar.dart';
-import 'package:gb_pay_mobile/src/features/new_payment/pages/new_payment_screen.dart';
-import 'package:gb_pay_mobile/src/features/payment/pages/payment_screen.dart';
 import 'package:gb_pay_mobile/src/features/feed/pages/feed_screen.dart';
 import 'package:gb_pay_mobile/src/features/greetings/pages/greetings_screen.dart';
 import 'package:gb_pay_mobile/src/features/home/home_lscreen.dart';
 import 'package:gb_pay_mobile/src/features/home/pages/home_screen.dart';
+import 'package:gb_pay_mobile/src/features/payment/pages/payment_screen.dart';
 import 'package:gb_pay_mobile/src/features/signin/pages/signin_screen.dart';
 import 'package:gb_pay_mobile/src/features/signup/pages/signup_screen.dart';
 import 'package:gb_pay_mobile/src/features/splash/pages/splash_screen.dart';
 import 'package:gb_pay_mobile/src/features/token/pages/token_screen.dart';
-import 'package:flutter/material.dart';
 
 class AppRouteNames {
   static const String splash = '/';
