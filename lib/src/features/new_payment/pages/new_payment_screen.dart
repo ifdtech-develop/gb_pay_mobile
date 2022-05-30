@@ -18,6 +18,7 @@ class NewPaymentPage extends StatefulWidget {
 class _NewPaymentPageState extends State<NewPaymentPage> {
   bool _checkToday = false;
   bool _checkOther = false;
+  late String code = '';
   String dateCalendar = '';
   TextEditingController DateController = TextEditingController();
   DateTime data = DateTime.now();
@@ -27,6 +28,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
     super.initState();
     DateController.addListener(() {
       dateCalendar = DateTime.now().toString();
+      //code = arguments['/codeBarPage'];
     });
   }
 
@@ -66,21 +68,23 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
           )
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(
-            children: [
-              _payAccount,
-              _cardParcel,
-              _divider,
-              _checkBox,
-              _divider,
-              _mountInfoPage,
-            ],
-          ),
-          _continueButton
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Column(
+              children: [
+                _payAccount,
+                _cardParcel,
+                _divider,
+                _checkBox,
+                _divider,
+                _mountInfoPage,
+              ],
+            ),
+            _continueButton
+          ],
+        ),
       ),
     );
   }
@@ -342,7 +346,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
             Text(
               info,
               style: TextStyle(
-                fontSize: 23.0,
+                fontSize: 16.0,
                 color: ColorsProject.whiteSilver,
                 fontWeight: FontWeight.normal,
               ),
@@ -350,7 +354,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
             Text(
               '$infoSupply',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 12.0,
                 color: ColorsProject.whiteSilver,
                 fontWeight: FontWeight.bold,
               ),
@@ -370,26 +374,31 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
   }
 
   Widget get _continueButton {
-    return SizedBox(
-      width: 330.0,
-      height: 60.0,
-      child: ElevatedButton(
-        onPressed: () {
-          Navigator.pushNamed(context, AppRouteNames.creditcard);
-        },
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.0),
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 16.0,
+      ),
+      child: SizedBox(
+        width: 330.0,
+        height: 60.0,
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, AppRouteNames.creditcard);
+          },
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6.0),
+            ),
+            primary: ColorsProject.blueWhite,
+            elevation: 0,
           ),
-          primary: ColorsProject.blueWhite,
-          elevation: 0,
-        ),
-        child: const Text(
-          'Próximo',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 28.0,
-            fontWeight: FontWeight.normal,
+          child: const Text(
+            'Próximo',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 28.0,
+              fontWeight: FontWeight.normal,
+            ),
           ),
         ),
       ),

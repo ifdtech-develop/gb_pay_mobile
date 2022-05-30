@@ -28,14 +28,76 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: Drawer(
+        backgroundColor: Color(0xFF00C0FF),
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: 72.0,
+          ),
+          child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: [
+              ListTile(
+                leading: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                ),
+                title: const Text(
+                  'Perfil do usuário',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onTap: () {
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.money,
+                  color: Colors.white,
+                ),
+                hoverColor: Colors.white70,
+                title: const Text(
+                  'Extrato',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17.0,
+                    color: Colors.white,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, AppRouteNames.statement);
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.exit_to_app,
+                  color: Colors.white,
+                ),
+                hoverColor: Colors.white70,
+                title: const Text(
+                  'Sair',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17.0,
+                    color: Colors.white,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, AppRouteNames.greetings);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
       appBar: AppBar(
-        // title: Text(
-        //   'Olá, ' + widget.user.name.split(" ")[0],
-        //   style: const TextStyle(
-        //     fontSize: 27,
-        //     fontWeight: FontWeight.bold,
-        //   ),
-        // ),
         centerTitle: true,
         leading: Image.asset(
           AppAssets.logoIcon,
@@ -43,37 +105,49 @@ class _PaymentPageState extends State<PaymentPage> {
           fit: BoxFit.fill,
         ),
         leadingWidth: MediaQuery.of(context).size.width,
+        iconTheme: IconThemeData(color: Colors.white, size: 40.0),
       ),
       body: Padding(
         padding: const EdgeInsets.only(
           left: 16.0,
           right: 16.0,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 104.0),
-              child: Center(
-                child: Text(
-                  'Olá, ' + widget.user.name.split(" ")[0],
-                  style: TextStyle(
-                    color: ColorsProject.blueWhite,
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _backButton,
+              Padding(
+                padding: const EdgeInsets.only(top: 88.0),
+                child: Center(
+                  child: Text(
+                    'Olá, ' + widget.user.name.split(" ")[0],
+                    style: TextStyle(
+                      color: ColorsProject.blueWhite,
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
-            ),
-            _dataCode,
-            _paymentTitle,
-            _paymentIcon,
-            _buttonUseCodeBar(context),
-            _buttonEnterCodeBar(context),
-          ],
+              _dataCode,
+              _paymentTitle,
+              _paymentIcon,
+              _buttonUseCodeBar(context),
+              _buttonEnterCodeBar(context),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Widget get _backButton {
+    return Align(
+        alignment: Alignment.topLeft,
+        child: BackButton(
+          color: ColorsProject.blueWhite,
+        ));
   }
 
   Widget get _dataCode {
@@ -93,7 +167,7 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget get _paymentTitle {
     return const Padding(
       padding: EdgeInsets.only(
-        top: 110.0,
+        top: 84.0,
         bottom: 24.0,
       ),
       child: Text(

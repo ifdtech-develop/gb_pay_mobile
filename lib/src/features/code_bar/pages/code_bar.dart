@@ -216,7 +216,11 @@ class _CodeBarPageState extends State<CodeBarPage> {
       height: 60.0,
       child: ElevatedButton(
         onPressed: () {
-          Navigator.pushNamed(context, AppRouteNames.newPaymentPage);
+          Navigator.pushNamed(
+            context,
+            AppRouteNames.newPaymentPage,
+            arguments: codeBar,
+          );
         },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(

@@ -13,6 +13,7 @@ import 'package:gb_pay_mobile/src/features/receipt/pages/receipt_screen.dart';
 import 'package:gb_pay_mobile/src/features/signin/pages/signin_screen.dart';
 import 'package:gb_pay_mobile/src/features/signup/pages/signup_screen.dart';
 import 'package:gb_pay_mobile/src/features/splash/pages/splash_screen.dart';
+import 'package:gb_pay_mobile/src/features/statement/pages/statement_screen.dart';
 import 'package:gb_pay_mobile/src/features/token/pages/token_screen.dart';
 
 class AppRouteNames {
@@ -30,6 +31,7 @@ class AppRouteNames {
   static const String creditcard = '/creditcard';
   static const String paymentLocation = '/paymentLocation';
   static const String receipt = '/receipt';
+  static const String statement = '/statement';
 }
 
 class AppRoutes {
@@ -56,5 +58,6 @@ class AppRoutes {
     AppRouteNames.creditcard: (_) => CreditCardScreen(),
     AppRouteNames.paymentLocation: (_) => PaymentLocationScreen(),
     AppRouteNames.receipt: (_) => ReceiptScreen(),
+    AppRouteNames.statement: (_) => StatementPage(),
   };
 }
