@@ -176,6 +176,8 @@ class PaymentLocationScreenText {
   ];
 
   static getStates() {
+    PaymentLocationScreenText.listOfStates = [];
+
     for (var element in PaymentLocationScreenText.dataIBGE) {
       PaymentLocationScreenText.listOfStates.add(element['nome']);
     }
