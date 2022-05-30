@@ -23,7 +23,7 @@ class _CodeBarPageState extends State<CodeBarPage> {
   String description = '';
   TextEditingController codeBarController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  var maskFormatter = new MaskTextInputFormatter(
+  var maskFormatter = MaskTextInputFormatter(
       mask: '#####.##### #####.###### ### #####.###### # ##############',
       type: MaskAutoCompletionType.lazy);
 
@@ -53,40 +53,47 @@ class _CodeBarPageState extends State<CodeBarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            CodeBarText.title,
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
+      appBar: AppBar(
+        title: const Text(
+          CodeBarText.title,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
           ),
-          leading: BackButton(),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  scanCodeBar();
-                },
-                icon: Image.asset(
-                  AppAssets.cameraIcon,
-                  color: Colors.white,
-                )),
-          ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.only(
-            top: 48.0,
-          ),
-          child: Container(
-            child: Column(
-              children: [
-                _codeBar(context),
-                _description(context),
-                _continueButton,
-              ],
+        centerTitle: true,
+        toolbarHeight: 100,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        iconTheme: IconThemeData(color: ColorsProject.blueWhite, size: 40.0),
+        actions: [
+          IconButton(
+            onPressed: () {
+              scanCodeBar();
+            },
+            icon: Image.asset(
+              AppAssets.cameraIcon,
+              color: ColorsProject.blueWhite,
             ),
           ),
-        ));
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(
+          top: 50.0,
+        ),
+        child: SizedBox(
+          child: Column(
+            children: [
+              _codeBar(context),
+              _description(context),
+              _continueButton,
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _codeBar(BuildContext context) {
@@ -107,7 +114,7 @@ class _CodeBarPageState extends State<CodeBarPage> {
                       text: CodeBarText.codeBar,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 20.0,
+                        fontSize: 25.0,
                       ),
                     ),
                     TextSpan(text: '   '),
@@ -173,7 +180,7 @@ class _CodeBarPageState extends State<CodeBarPage> {
                   CodeBarText.description,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 20.0,
+                    fontSize: 25.0,
                   ),
                 ),
               ),
@@ -204,27 +211,27 @@ class _CodeBarPageState extends State<CodeBarPage> {
   }
 
   Widget get _continueButton {
-    return ElevatedButton(
-      onPressed: () {
-        Navigator.pushNamed(context, AppRouteNames.newPaymentPage);
-      },
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6.0),
+    return SizedBox(
+      width: 330.0,
+      height: 60.0,
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.pushNamed(context, AppRouteNames.newPaymentPage);
+        },
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6.0),
+          ),
+          primary: ColorsProject.blueWhite,
+          elevation: 0,
         ),
-        minimumSize: Size(
-          330.0,
-          48.0,
-        ),
-        primary: ColorsProject.blueWhite,
-        elevation: 0,
-      ),
-      child: Text(
-        CodeBarText.nextButton,
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 15,
-          fontWeight: FontWeight.normal,
+        child: Text(
+          CodeBarText.nextButton,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 28.0,
+            fontWeight: FontWeight.normal,
+          ),
         ),
       ),
     );
