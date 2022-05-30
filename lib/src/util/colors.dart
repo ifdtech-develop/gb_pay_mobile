@@ -37,6 +37,4 @@ class ColorsProject {
   static final blueWhite = Color(0xFF00C0FF);
   static final whiteSilver = Color(0xFF847D7F);
   static final whiteSilverLow = Color(0xFFCBC6C6);
-  static final strongGrey = Color(0xFF707070);
-  static final lowGrey = Color(0xFF847D7F);
 }

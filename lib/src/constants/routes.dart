@@ -49,8 +49,5 @@ class AppRoutes {
     AppRouteNames.paymentpage: (args) => PaymentPage(
           user: args as UserEntity,
         ),
-    AppRouteNames.creditcard: (_) => CreditCardScreen(),
-    AppRouteNames.paymentLocation: (_) => PaymentLocationScreen(),
-    AppRouteNames.receipt: (_) => ReceiptScreen(),
   };
 }
