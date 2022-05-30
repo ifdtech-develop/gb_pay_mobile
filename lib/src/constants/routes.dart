@@ -22,9 +22,6 @@ class AppRouteNames {
   static const String homel = '/homel';
   static const String feed = '/feed';
   static const String paymentpage = '/paymentpage';
-  static const String creditcard = '/creditcard';
-  static const String paymentLocation = '/paymentLocation';
-  static const String receipt = '/receipt';
 }
 
 class AppRoutes {
