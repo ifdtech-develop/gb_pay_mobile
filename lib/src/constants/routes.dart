@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:gb_pay_mobile/src/domain/entity/user_entity.dart';
+import 'package:gb_pay_mobile/src/features/code_bar/pages/code_bar.dart';
+import 'package:gb_pay_mobile/src/features/new_payment/pages/new_payment_screen.dart';
 import 'package:gb_pay_mobile/src/features/payment/pages/payment_screen.dart';
 import 'package:gb_pay_mobile/src/features/feed/pages/feed_screen.dart';
 import 'package:gb_pay_mobile/src/features/greetings/pages/greetings_screen.dart';
@@ -21,7 +23,9 @@ class AppRouteNames {
   static const String home = '/home';
   static const String homel = '/homel';
   static const String feed = '/feed';
-  static const String paymentpage = '/paymentpage';
+  static const String paymentpage = '/paymentPage';
+  static const String codeBarPage = '/codeBarPage';
+  static const String newPaymentPage = '/newPaymentPage';
 }
 
 class AppRoutes {
@@ -43,5 +47,7 @@ class AppRoutes {
     AppRouteNames.paymentpage: (args) => PaymentPage(
           user: args as UserEntity,
         ),
+    AppRouteNames.codeBarPage: (args) => CodeBarPage(),
+    AppRouteNames.newPaymentPage: (args) => NewPaymentPage(),
   };
 }

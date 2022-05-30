@@ -56,6 +56,8 @@ dependencies:
   stomp_dart_client: ^0.4.3
   mask_text_input_formatter: ^2.3.0
   masked_text: ^0.0.6
+  flutter_barcode_scanner: ^2.0.0
+  table_calendar: ^3.0.5
 
 dev_dependencies:
   flutter_test:

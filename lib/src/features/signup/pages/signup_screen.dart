@@ -365,11 +365,7 @@ class _SignupScreenState extends State<SignupScreen> {
             error: state.phoneError,
             inputType: TextInputType.number,
             inputMask: [
-              TextInputMask(
-                mask: '(00) 00000-0000',
-                placeholder: ' ',
-                maxLength: 15,
-              ),
+              TextInputMask(mask: '(99) 99999-9999'),
             ],
             controller: _phoneController,
           ),
