@@ -59,7 +59,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   'Olá, ' + widget.user.name.split(" ")[0],
                   style: TextStyle(
                     color: ColorsProject.blueWhite,
-                    fontSize: 27,
+                    fontSize: 30.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -83,7 +83,7 @@ class _PaymentPageState extends State<PaymentPage> {
         PaymentScreenText.code,
         style: TextStyle(
           color: Colors.black,
-          fontSize: 20,
+          fontSize: 25.0,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -100,7 +100,7 @@ class _PaymentPageState extends State<PaymentPage> {
         PaymentScreenText.payment,
         style: TextStyle(
           color: Colors.black,
-          fontSize: 22,
+          fontSize: 30.0,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -122,30 +122,30 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget _buttonUseCodeBar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        top: 24.0,
-        bottom: 8.0,
+        top: 30.0,
+        bottom: 25.0,
       ),
-      child: ElevatedButton(
-        onPressed: () {
-          scanCodeBar();
-        },
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.0),
+      child: SizedBox(
+        height: 60.0,
+        width: MediaQuery.of(context).size.width * 0.7,
+        child: ElevatedButton(
+          onPressed: () {
+            scanCodeBar();
+          },
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6.0),
+            ),
+            primary: ColorsProject.blueWhite,
+            elevation: 0,
           ),
-          minimumSize: Size(
-            294.0,
-            32.0,
-          ),
-          primary: ColorsProject.blueWhite,
-          elevation: 0,
-        ),
-        child: Text(
-          PaymentScreenText.useReaderCode,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 15,
-            fontWeight: FontWeight.normal,
+          child: const Text(
+            PaymentScreenText.useReaderCode,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 25.0,
+              fontWeight: FontWeight.normal,
+            ),
           ),
         ),
       ),
@@ -153,27 +153,27 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   Widget _buttonEnterCodeBar(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        Navigator.pushNamed(context, AppRouteNames.codeBarPage);
-      },
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6.0),
+    return SizedBox(
+      height: 60.0,
+      width: MediaQuery.of(context).size.width * 0.7,
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.pushNamed(context, AppRouteNames.codeBarPage);
+        },
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6.0),
+          ),
+          primary: ColorsProject.blueWhite,
+          elevation: 0,
         ),
-        minimumSize: Size(
-          294.0,
-          32.0,
-        ),
-        primary: ColorsProject.whiteSilverLow,
-        elevation: 0,
-      ),
-      child: Text(
-        PaymentScreenText.enterCode,
-        style: TextStyle(
-          color: ColorsProject.whiteSilver,
-          fontSize: 15,
-          fontWeight: FontWeight.normal,
+        child: const Text(
+          PaymentScreenText.enterCode,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 25.0,
+            fontWeight: FontWeight.normal,
+          ),
         ),
       ),
     );
