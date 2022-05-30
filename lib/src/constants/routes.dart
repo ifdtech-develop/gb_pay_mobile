@@ -21,7 +21,9 @@ class AppRouteNames {
   static const String home = '/home';
   static const String homel = '/homel';
   static const String feed = '/feed';
-  static const String paymentpage = '/paymentpage';
+  static const String paymentpage = '/paymentPage';
+  static const String codeBarPage = '/codeBarPage';
+  static const String newPaymentPage = '/newPaymentPage';
 }
 
 class AppRoutes {
@@ -43,5 +45,7 @@ class AppRoutes {
     AppRouteNames.paymentpage: (args) => PaymentPage(
           user: args as UserEntity,
         ),
+    AppRouteNames.codeBarPage: (args) => CodeBarPage(),
+    AppRouteNames.newPaymentPage: (args) => NewPaymentPage(),
   };
 }

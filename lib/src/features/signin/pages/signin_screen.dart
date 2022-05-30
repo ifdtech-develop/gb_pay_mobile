@@ -1,4 +1,5 @@
 import 'package:easy_mask/easy_mask.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:gb_pay_mobile/src/component/fennec_text_field.dart';
 import 'package:gb_pay_mobile/src/constants/routes.dart';
 import 'package:gb_pay_mobile/src/constants/single.dart';
@@ -36,14 +37,20 @@ class _SigninScreenState extends State<SigninScreen> {
   void initState() {
     super.initState();
     _pageController.addListener(() {
-      if (_pageController.hasClients) {
-        _currentPage.value = SigninPages.values[_pageController.page!.toInt()];
-      }
+      SchedulerBinding.instance?.addPostFrameCallback(
+        (_) {
+          if (_pageController.hasClients) {
+            _currentPage.value =
+                SigninPages.values[_pageController.page!.toInt()];
+          }
+        },
+      );
     });
   }
 
   @override
   void dispose() {
+    _pageController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
