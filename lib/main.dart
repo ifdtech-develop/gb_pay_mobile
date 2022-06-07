@@ -1,40 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:gb_pay_mobile/src/constants/routes.dart';
-import 'package:gb_pay_mobile/src/di/app_injector.dart';
-import 'package:gb_pay_mobile/src/di/injector.dart';
-import 'package:gb_pay_mobile/src/features/not_found/pages/not_found_screen.dart';
-import 'package:gb_pay_mobile/src/util/colors.dart';
-import 'package:gb_pay_mobile/src/util/global_context.dart';
-import 'package:gb_pay_mobile/src/util/service_location.dart';
+import 'package:gb_pay_mobile/constants/routes.dart';
+import 'package:gb_pay_mobile/features/not_found/pages/not_found_screen.dart';
+import 'package:gb_pay_mobile/util/global_context.dart';
+import 'package:gb_pay_mobile/util/service_location.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  AppInjector().injection(injection);
-
   NavigationService().setupLocator();
 
-  runApp(const FennecApp());
+  runApp(const GbPayApp());
 }
 
-class FennecApp extends StatefulWidget {
-  const FennecApp({Key? key}) : super(key: key);
+class GbPayApp extends StatefulWidget {
+  const GbPayApp({Key? key}) : super(key: key);
 
   @override
-  State<FennecApp> createState() => _FennecAppState();
+  State<GbPayApp> createState() => _GbPayAppState();
 }
 
-class _FennecAppState extends State<FennecApp> {
+class _GbPayAppState extends State<GbPayApp> {
   final ThemeData themeData = ThemeData.light();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRouteNames.splash,
+      initialRoute: AppRouteNames.greetings,
       navigatorKey: locator<NavigationService>().navigatorKey,
       theme: themeData.copyWith(
-        colorScheme: AppColors().colors,
         textTheme: TextTheme(
           headline1: themeData.textTheme.headline1
               ?.copyWith(fontFamily: 'ArialRounded'),
