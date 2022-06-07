@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:gb_pay_mobile/features/code_bar/pages/code_bar.text.dart';
+import 'package:gb_pay_mobile/services/ticket_query_dto.dart';
 import 'package:gb_pay_mobile/util/assets.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
 import 'package:gb_pay_mobile/util/screen.dart';
@@ -18,6 +19,7 @@ class CodeBarPage extends StatefulWidget with Screen {
 
 class _CodeBarPageState extends State<CodeBarPage> {
   final _formKey = GlobalKey<FormState>();
+  final TicketQueryDTO _ticketQueryDTO = TicketQueryDTO();
 
   String codeBar = '';
   String description = '';
@@ -227,10 +229,28 @@ class _CodeBarPageState extends State<CodeBarPage> {
       child: ElevatedButton(
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            widget.navigator.pushNamed(
-              AppRouteNames.newPaymentPage,
-              arguments: codeBar,
-            );
+            // tipo do boleto, se o codigo de barras começar com 8 o tipo é 1, com 8 é conta de luz, agua
+            // tipo 2 é tipo banco
+            var codeBarType = 1;
+            if (codeBarController.text.substring(0, 1) == "8") {
+              codeBarType = 1;
+            } else {
+              codeBarType = 2;
+            }
+            //
+            var codeBarEdited = codeBarController.text.replaceAll('.', '');
+            codeBarEdited = codeBarEdited.replaceAll(' ', '');
+
+            _ticketQueryDTO
+                .ticketQuery(codeBarType, codeBarEdited, '')
+                .then((value) {
+              widget.navigator.pushNamed(
+                AppRouteNames.newPaymentPage,
+                arguments: value,
+              );
+            }).catchError((error) {
+              print(error);
+            });
           }
         },
         style: ElevatedButton.styleFrom(

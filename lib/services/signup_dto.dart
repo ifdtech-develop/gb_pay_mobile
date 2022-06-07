@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class SignupDTO {
   Future<SignupModel> signup(String nome, String cpf, String senha,
       String email, String endereco) async {
-    final response = await http.post(Uri.parse('$localURL/auth'),
+    final response = await http.post(Uri.parse('$serverURL/auth'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },

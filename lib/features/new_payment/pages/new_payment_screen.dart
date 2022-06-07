@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:gb_pay_mobile/constants/routes.dart';
+import 'package:gb_pay_mobile/models/ticket_query/ticket_query.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
 import 'package:intl/intl.dart';
 
 import '../../../util/assets.dart';
 
 class NewPaymentPage extends StatefulWidget {
-  const NewPaymentPage({Key? key}) : super(key: key);
+  final TicketQuery ticketInfo;
+
+  const NewPaymentPage({Key? key, required this.ticketInfo}) : super(key: key);
 
   @override
   State<NewPaymentPage> createState() => _NewPaymentPageState();
@@ -66,23 +69,21 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Column(
-              children: [
-                _payAccount,
-                _cardParcel,
-                _divider,
-                _checkBox,
-                _divider,
-                _mountInfoPage,
-              ],
-            ),
-            _continueButton
-          ],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            children: [
+              _payAccount,
+              // _cardParcel,
+              _divider,
+              // _checkBox,
+              // _divider,
+              _mountInfoPage,
+            ],
+          ),
+          _continueButton
+        ],
       ),
     );
   }
@@ -116,8 +117,8 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
+              children: [
+                const Text(
                   'Pagar conta',
                   style: TextStyle(
                     color: Colors.black,
@@ -125,12 +126,12 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     top: 8.0,
                   ),
                   child: Text(
-                    'R\$ 10,00',
-                    style: TextStyle(
+                    'R\$ ${widget.ticketInfo.value.toString()}',
+                    style: const TextStyle(
                       color: ColorsProject.green,
                       fontWeight: FontWeight.bold,
                       fontSize: 25.0,
@@ -321,12 +322,12 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
     return Column(
       children: [
         infoPage('Data de pagamento', DateFormat("dd/MM/yyyy").format(data)),
-        infoPage('Beneficiário', 'RECARGA IT - BANCO ITAUCARD SA'),
-        infoPage('Vencimento', '31/05/2022'),
+        infoPage('Beneficiário', widget.ticketInfo.assignor),
+        infoPage('Vencimento', widget.ticketInfo.dueDate ?? 'Sem Vencimento'),
         infoPage('Forma de pagamento', 'Cartão de crédito'),
-        infoPage('Taxa de conveniência do cartão', 'R\$ 0,40'),
-        infoPage('Taxa de parcelamento', 'R\$ 0,62'),
-        infoPage('Parcelas', '2x de R\$ 5,51'),
+        // infoPage('Taxa de conveniência do cartão', 'R\$ 0,40'),
+        // infoPage('Taxa de parcelamento', 'R\$ 0,62'),
+        // infoPage('Parcelas', '2x de R\$ 5,51'),
       ],
     );
   }
@@ -364,17 +365,20 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
   }
 
   Widget get _divider {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
-      height: 1.0,
-      color: ColorsProject.whiteSilver,
+    return Padding(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: 1.0,
+        color: ColorsProject.whiteSilver,
+      ),
     );
   }
 
   Widget get _continueButton {
     return Padding(
       padding: const EdgeInsets.only(
-        top: 16.0,
+        bottom: 25.0,
       ),
       child: SizedBox(
         width: 330.0,

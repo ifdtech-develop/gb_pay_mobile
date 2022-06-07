@@ -133,7 +133,7 @@ class _SigninPageState extends State<SigninPage> {
                               .signin(
                                   emailController.text, passwordController.text)
                               .then((value) {
-                            _setToken(value.acessToken, value.name, value.id);
+                            _setToken(value.accessToken, value.name, value.id);
                             print('deu bom');
                           }).catchError((error) {
                             print("error");
@@ -192,7 +192,7 @@ class _SigninPageState extends State<SigninPage> {
 
   _setToken(token, name, id) async {
     final SharedPreferences prefs = await _prefs;
-    prefs.setString('token', token ?? '');
+    prefs.setString('token', token);
     prefs.setString('userName', name);
     prefs.setString('userId', id.toString());
 

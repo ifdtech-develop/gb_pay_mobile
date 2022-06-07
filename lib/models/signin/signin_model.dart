@@ -2,14 +2,14 @@ class SigninModel {
   int? id;
   String? name;
   String? email;
-  String? acessToken;
+  String? accessToken;
   String? tokenType;
 
   SigninModel({
     this.id,
     this.name,
     this.email,
-    this.acessToken,
+    this.accessToken,
     this.tokenType,
   });
 
@@ -18,7 +18,7 @@ class SigninModel {
       id: json['id'],
       name: json['nome'],
       email: json['email'],
-      acessToken: json['acessToken'],
+      accessToken: json['accessToken'],
       tokenType: json['tokenType'],
     );
   }
