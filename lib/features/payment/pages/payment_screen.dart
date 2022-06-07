@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:gb_pay_mobile/constants/routes.dart';
 import 'package:gb_pay_mobile/features/payment/pages/payment_screen.text.dart';
+import 'package:gb_pay_mobile/services/ticket_query_dto.dart';
 import 'package:gb_pay_mobile/util/assets.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
+import 'package:gb_pay_mobile/util/screen.dart';
 
-class PaymentPage extends StatefulWidget {
+class PaymentPage extends StatefulWidget with Screen {
   final String user;
 
-  const PaymentPage({required this.user, Key? key}) : super(key: key);
+  PaymentPage({required this.user, Key? key}) : super(key: key);
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -16,12 +18,38 @@ class PaymentPage extends StatefulWidget {
 
 class _PaymentPageState extends State<PaymentPage> {
   String data = "";
+  final TicketQueryDTO _ticketQueryDTO = TicketQueryDTO();
 
   Future scanCodeBar() async {
     String code = await FlutterBarcodeScanner.scanBarcode(
         '#000000', 'Cancelar', true, ScanMode.BARCODE);
 
-    setState(() => data = code != '-1' ? code : 'Não validado');
+    setState(() {
+      data = code;
+      print('data');
+      print(data);
+      // tipo do boleto, se o codigo de barras começar com 8 o tipo é 1, com 8 é conta de luz, agua
+      // tipo 2 é tipo banco
+      var codeBarType = 1;
+      if (data.substring(0, 1) == "8") {
+        codeBarType = 1;
+      } else {
+        codeBarType = 2;
+      }
+      //
+
+      _ticketQueryDTO.ticketQuery(codeBarType, '', data).then((value) {
+        print('value on scan');
+        print(value);
+        widget.navigator.pushNamed(
+          AppRouteNames.newPaymentPage,
+          arguments: value,
+        );
+      }).catchError((error) {
+        print(error);
+        print('Tente ler o codigo de barras mais de perto.');
+      });
+    });
   }
 
   @override

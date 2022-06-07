@@ -20,6 +20,7 @@ class CodeBarPage extends StatefulWidget with Screen {
 class _CodeBarPageState extends State<CodeBarPage> {
   final _formKey = GlobalKey<FormState>();
   final TicketQueryDTO _ticketQueryDTO = TicketQueryDTO();
+  String data = "";
 
   String codeBar = '';
   String description = '';
@@ -33,7 +34,32 @@ class _CodeBarPageState extends State<CodeBarPage> {
     String code = await FlutterBarcodeScanner.scanBarcode(
         '#000000', 'Cancelar', true, ScanMode.BARCODE);
 
-    setState(() => codeBar = code != '-1' ? code : 'Não validado');
+    setState(() {
+      data = code;
+      print('data');
+      print(data);
+      // tipo do boleto, se o codigo de barras começar com 8 o tipo é 1, com 8 é conta de luz, agua
+      // tipo 2 é tipo banco
+      var codeBarType = 1;
+      if (data.substring(0, 1) == "8") {
+        codeBarType = 1;
+      } else {
+        codeBarType = 2;
+      }
+      //
+
+      _ticketQueryDTO.ticketQuery(codeBarType, '', data).then((value) {
+        print('value on scan');
+        print(value);
+        widget.navigator.pushNamed(
+          AppRouteNames.newPaymentPage,
+          arguments: value,
+        );
+      }).catchError((error) {
+        print(error);
+        print('Tente ler o codigo de barras mais de perto.');
+      });
+    });
   }
 
   @override
