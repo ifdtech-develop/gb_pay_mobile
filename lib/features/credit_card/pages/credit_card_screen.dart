@@ -23,6 +23,12 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
   String dropdownValue = CreditCardScreenText.listOfParcels[0];
 
   @override
+  void dispose() {
+    numeroCartaoController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
