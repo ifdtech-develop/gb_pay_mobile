@@ -10,6 +10,7 @@ import 'package:gb_pay_mobile/features/signin/signin_page.dart';
 import 'package:gb_pay_mobile/features/signup/signup_page.dart';
 import 'package:gb_pay_mobile/features/statement/pages/statement_screen.dart';
 import 'package:gb_pay_mobile/features/token/token_page.dart';
+import 'package:gb_pay_mobile/models/paymentCard/paymentCard_model.dart';
 import 'package:gb_pay_mobile/models/ticket_query/ticket_query.dart';
 
 class AppRouteNames {
@@ -43,9 +44,15 @@ class AppRoutes {
     AppRouteNames.newPaymentPage: (args) => NewPaymentPage(
           ticketInfo: args as TicketQuery,
         ),
-    AppRouteNames.creditcard: (_) => CreditCardScreen(),
-    AppRouteNames.paymentLocation: (_) => PaymentLocationScreen(),
-    AppRouteNames.receipt: (_) => ReceiptScreen(),
+    AppRouteNames.creditcard: (args) => CreditCardScreen(
+      valor: args as int,
+    ),
+    AppRouteNames.paymentLocation: (args) => PaymentLocationScreen(
+      paymentInformation: args as PaymentCardModel,
+    ),
+    AppRouteNames.receipt: (args) => ReceiptScreen(
+      valor: args as PaymentCardModel,
+    ),
     AppRouteNames.statement: (_) => const StatementPage(),
   };
 }

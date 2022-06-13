@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:gb_pay_mobile/constants/routes.dart';
+import 'package:gb_pay_mobile/features/signin/signin_page.text.dart';
 import 'package:gb_pay_mobile/services/signin_dto.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
 import 'package:gb_pay_mobile/util/screen.dart';
+import 'package:gb_pay_mobile/widgets/messageError_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../components/signin_components/form_inputs_components.dart';
+import '../../widgets/new_account.dart';
 
 class SigninPage extends StatefulWidget with Screen {
   SigninPage({Key? key}) : super(key: key);
@@ -17,13 +24,26 @@ class _SigninPageState extends State<SigninPage> {
   TextEditingController passwordController = TextEditingController();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
 
   SigninDTO _signinDTO = SigninDTO();
 
   @override
   void initState() {
     super.initState();
-    _signinDTO = SigninDTO();
+    SchedulerBinding.instance.addPostFrameCallback(
+      (_) {
+        _signinDTO = SigninDTO();
+        isLoading = false;
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -47,75 +67,27 @@ class _SigninPageState extends State<SigninPage> {
                   const Align(
                       alignment: Alignment.center,
                       child: Text(
-                        'Que bom te ver novamente! Insira seus dados',
+                        SigninPageText.welcomeTitle,
                         style: TextStyle(
-                          fontSize: 14.0,
+                          fontSize: 16.0,
                           color: Colors.black87,
                         ),
                       )),
                   const SizedBox(
                     height: 40.0,
                   ),
-                  const Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Email',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.black,
-                        ),
-                      )),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  TextFormField(
+                  FormInputs(
                     controller: emailController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor insira seu e-mail';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      hintText: 'email@exemplo.com',
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 15),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 2, color: Colors.grey),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                    ),
+                    title: SigninPageText.titleEmail,
+                    hintText: SigninPageText.hintEmail,
                   ),
                   const SizedBox(
                     height: 32.0,
                   ),
-                  const Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Senha',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.black,
-                        ),
-                      )),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  TextFormField(
-                    obscureText: true,
+                  FormInputs(
                     controller: passwordController,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 15),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 2, color: Colors.grey),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                    ),
+                    title: SigninPageText.titlePassword,
+                    obscure: true,
                   ),
                   const SizedBox(
                     height: 40.0,
@@ -127,60 +99,58 @@ class _SigninPageState extends State<SigninPage> {
                       style: ElevatedButton.styleFrom(
                         primary: ColorsProject.blueWhite,
                       ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate() || isLoading) {
+                          setState(() {
+                            isLoading = true;
+                          });
                           _signinDTO
                               .signin(
                                   emailController.text, passwordController.text)
                               .then((value) {
                             _setToken(value.accessToken, value.name, value.id);
-                            print('deu bom');
                           }).catchError((error) {
-                            print("error");
-                            print(error);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(error),
-                                duration: const Duration(seconds: 5),
+                                elevation: 0,
+                                backgroundColor: Colors.transparent,
+                                content: MessageError(
+                                  text: SigninPageText.invalidUser,
+                                ),
+                                duration: Duration(seconds: 3),
                               ),
                             );
                           });
                         }
+                        await Future.delayed(Duration(seconds: 1));
+                        if (isLoading = mounted) {
+                          setState(() {
+                            isLoading = false;
+                          });
+                        }
                       },
-                      child: const Text(
-                        'Entrar',
-                        style: TextStyle(
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      child: isLoading
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircularProgressIndicator(
+                                  color: ColorsProject.whiteSilver,
+                                ),
+                              ],
+                            )
+                          : Text(
+                              SigninPageText.continuePage,
+                              style: TextStyle(
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                     ),
                   ),
                   const SizedBox(
                     height: 8.0,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Não tem conta?',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pushReplacementNamed('/signup');
-                        },
-                        child: const Text(
-                          'Cadastre-se',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
+                  const NewAccount(),
                 ],
               ),
             ),

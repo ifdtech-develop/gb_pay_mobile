@@ -29,6 +29,7 @@ class _CodeBarPageState extends State<CodeBarPage> {
   var maskFormatter = MaskTextInputFormatter(
       mask: '#####.##### #####.###### ### #####.###### # ##############',
       type: MaskAutoCompletionType.lazy);
+  bool isLoading = false;
 
   Future scanCodeBar() async {
     String code = await FlutterBarcodeScanner.scanBarcode(
@@ -253,8 +254,11 @@ class _CodeBarPageState extends State<CodeBarPage> {
       width: 330.0,
       height: 60.0,
       child: ElevatedButton(
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {
+        onPressed: () async {
+          if (_formKey.currentState!.validate() || isLoading) {
+            setState(() {
+              isLoading = true;
+            });
             // tipo do boleto, se o codigo de barras começar com 8 o tipo é 1, com 8 é conta de luz, agua
             // tipo 2 é tipo banco
             var codeBarType = 1;
@@ -278,6 +282,12 @@ class _CodeBarPageState extends State<CodeBarPage> {
               print(error);
             });
           }
+          await Future.delayed(Duration(seconds: 3));
+          if (isLoading = mounted) {
+            setState(() {
+              isLoading = false;
+            });
+          }
         },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
@@ -286,14 +296,23 @@ class _CodeBarPageState extends State<CodeBarPage> {
           primary: ColorsProject.blueWhite,
           elevation: 0,
         ),
-        child: const Text(
-          CodeBarText.nextButton,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 28.0,
-            fontWeight: FontWeight.normal,
-          ),
-        ),
+        child: isLoading
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    color: ColorsProject.whiteSilver,
+                  ),
+                ],
+              )
+            : const Text(
+                CodeBarText.nextButton,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 28.0,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
       ),
     );
   }

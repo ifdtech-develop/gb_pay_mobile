@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:gb_pay_mobile/models/signup/signup_model.dart';
 import 'package:gb_pay_mobile/util/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupDTO {
   Future<SignupModel> signup(String nome, String cpf, String senha,
@@ -26,5 +27,6 @@ class SignupDTO {
       print(response.body);
       throw Exception('Failed to signup');
     }
+    
   }
 }

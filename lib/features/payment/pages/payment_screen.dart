@@ -143,7 +143,6 @@ class _PaymentPageState extends State<PaymentPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _backButton,
               Padding(
                 padding: const EdgeInsets.only(top: 88.0),
                 child: Center(
@@ -167,14 +166,6 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
       ),
     );
-  }
-
-  Widget get _backButton {
-    return const Align(
-        alignment: Alignment.topLeft,
-        child: BackButton(
-          color: ColorsProject.blueWhite,
-        ));
   }
 
   Widget get _dataCode {

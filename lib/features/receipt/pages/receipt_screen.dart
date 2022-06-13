@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:gb_pay_mobile/features/receipt/pages/receipt_screen.text.dart';
+import 'package:gb_pay_mobile/models/paymentCard/paymentCard_model.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
 import 'package:gb_pay_mobile/util/screen.dart';
 
+import '../../../models/ticket_query/ticket_query.dart';
+
 class ReceiptScreen extends StatefulWidget with Screen {
-  ReceiptScreen({Key? key}) : super(key: key);
+  final PaymentCardModel valor;
+  ReceiptScreen({Key? key, required this.valor}) : super(key: key);
 
   @override
   State<ReceiptScreen> createState() => _ReceiptScreenState();
@@ -20,6 +25,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //PaymentCardModel args = ModalRoute.of(context)!.settings.arguments as PaymentCardModel;
     return Scaffold(
       appBar: AppBar(
         title: Column(
@@ -63,10 +69,10 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: const [
+                children: [
                   // valor
                   TitleWidget(text: ReceiptScreenText.titulo1),
-                  ValueWidget(text: ReceiptScreenText.valor),
+                  ValueWidget(text: '${widget.valor.amount}',),
                   // Quem vai receber
                   TitleWidget(text: ReceiptScreenText.titulo2),
                   SubTitleWidget(text: ReceiptScreenText.subtitulo2),
@@ -80,7 +86,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
                   SubTitleWidget(text: ReceiptScreenText.agenciaText),
                   ValueWidget(text: ReceiptScreenText.agenciaValue),
                   SubTitleWidget(text: ReceiptScreenText.nsuText),
-                  ValueWidget(text: ReceiptScreenText.nsuValue),
+                  ValueWidget(text: '${widget.valor.nsu}'),
                   SubTitleWidget(text: ReceiptScreenText.codigoText),
                   ValueWidget(text: ReceiptScreenText.codigoValue),
                 ],
@@ -91,10 +97,20 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
       ),
     );
   }
+  Widget _subtitle(String? text) {
+    return Text(
+      text!,
+      style: TextStyle(
+        fontSize: 28.0,
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
 }
 
 class TitleWidget extends StatelessWidget {
-  final String text;
+  final String? text;
 
   const TitleWidget({
     Key? key,
@@ -104,17 +120,18 @@ class TitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      text!,
       style: const TextStyle(
         fontSize: 30.0,
         color: ColorsProject.lowGrey,
       ),
     );
   }
+
 }
 
 class SubTitleWidget extends StatelessWidget {
-  final String text;
+  final String? text;
 
   const SubTitleWidget({
     Key? key,
@@ -124,7 +141,7 @@ class SubTitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      text!,
       style: const TextStyle(
         fontSize: 20.0,
         color: ColorsProject.lowGrey,
@@ -134,7 +151,7 @@ class SubTitleWidget extends StatelessWidget {
 }
 
 class ValueWidget extends StatelessWidget {
-  final String text;
+  final String? text;
 
   const ValueWidget({
     Key? key,
@@ -144,8 +161,8 @@ class ValueWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
-      style: const TextStyle(
+      text!,
+      style: TextStyle(
         fontSize: 28.0,
         color: Colors.black,
         fontWeight: FontWeight.bold,

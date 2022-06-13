@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gb_pay_mobile/constants/routes.dart';
 import 'package:gb_pay_mobile/features/payment_location/pages/payment_location_screen.text.dart';
+import 'package:gb_pay_mobile/models/paymentCard/paymentCard_model.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
 import 'package:gb_pay_mobile/util/screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PaymentLocationScreen extends StatefulWidget with Screen {
-  PaymentLocationScreen({Key? key}) : super(key: key);
+  PaymentCardModel paymentInformation;
+  PaymentLocationScreen({Key? key, required this.paymentInformation}) : super(key: key);
 
   @override
   State<PaymentLocationScreen> createState() => _PaymentLocationScreenState();
@@ -125,7 +128,7 @@ class _PaymentLocationScreenState extends State<PaymentLocationScreen> {
               height: 60.0,
               child: ElevatedButton(
                 onPressed: () {
-                  widget.navigator.pushNamed(AppRouteNames.receipt);
+                  widget.navigator.pushNamed(AppRouteNames.receipt, arguments: PaymentCardModel());
                 },
                 child: const Text(
                   'Pagar',
@@ -137,8 +140,8 @@ class _PaymentLocationScreenState extends State<PaymentLocationScreen> {
         ),
       ),
     );
-  }
-}
+  }}
+
 
 class FormInputs extends StatelessWidget {
   final TextEditingController numeroCartaoController;

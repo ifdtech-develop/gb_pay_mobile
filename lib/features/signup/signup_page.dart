@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
+import 'package:gb_pay_mobile/features/signup/signup_page.text.dart';
 import 'package:gb_pay_mobile/services/signup_dto.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:gb_pay_mobile/util/screen.dart';
+
+import '../../components/signup_components/inputs_components.dart';
+import '../../components/signup_components/password_component.dart';
+import '../../constants/routes.dart';
+import '../../widgets/divider.dart';
+import '../../widgets/messageError_widget.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -19,13 +29,21 @@ class _SignupPageState extends State<SignupPage> {
   TextEditingController confirmPassController = TextEditingController();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final _formKey = GlobalKey<FormState>();
+  var maskFormatterCPF = MaskTextInputFormatter(
+      mask: '###.###.###-##', type: MaskAutoCompletionType.lazy);
 
   SignupDTO _signupDTO = SignupDTO();
+  String confirmPass = '';
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _signupDTO = SignupDTO();
+    isLoading = false;
+    passController.addListener(() {
+      confirmPass = passController.text;
+    });
   }
 
   @override
@@ -59,20 +77,34 @@ class _SignupPageState extends State<SignupPage> {
                     child: Align(
                         alignment: Alignment.center,
                         child: Text(
-                          'Preencha com os seus dados para o cadastro!',
+                          SignupPageText.welcomeSignup,
                           style: TextStyle(
                             fontSize: 14.0,
                             color: Colors.black87,
                           ),
                         )),
                   ),
-                  _userInformation('Nome', nameController, ""),
-                  _userInformation(
-                      'E-mail', emailController, "exemplo@gbpay.com"),
-                  _userInformation('Endereço', addressController, ""),
-                  _userInformation(
-                      'CPF', documentUserController, "000.000.000-00"),
-                  _pass(),
+                  FormInputsSignup(
+                    controller: nameController,
+                    title: SignupPageText.titleName,
+                  ),
+                  FormInputsSignup(
+                    controller: emailController,
+                    title: SignupPageText.titleEmail,
+                    hintText: SignupPageText.hintEmail,
+                  ),
+                  FormInputsSignup(
+                      controller: addressController, title: SignupPageText.titleAddress),
+                  FormInputsSignup(
+                    controller: documentUserController,
+                    title: SignupPageText.titleDocument,
+                    hintText: SignupPageText.hintDocument,
+                    mask: [maskFormatterCPF],
+                    length: 14,
+                  ),
+                  FormInputsPass(
+                    controller: passController,
+                  ),
                   _confirmPass(),
                   const SizedBox(
                     height: 16.0,
@@ -84,8 +116,18 @@ class _SignupPageState extends State<SignupPage> {
                       style: ElevatedButton.styleFrom(
                         primary: ColorsProject.blueWhite,
                       ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate() || isLoading) {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          var documentEdited = '';
+                          documentEdited =
+                              documentUserController.text.replaceAll('.', '');
+                          documentEdited =
+                              documentUserController.text.replaceAll('-', '');
+                          documentEdited = documentEdited.replaceAll('.', '');
+                          documentEdited = documentEdited.replaceAll('-', '');
                           _signupDTO
                               .signup(
                                   nameController.text,
@@ -94,30 +136,49 @@ class _SignupPageState extends State<SignupPage> {
                                   emailController.text,
                                   addressController.text)
                               .then((value) {
-                            print('deu bom');
-                            Navigator.pushNamed(context, '/greetings');
+                            _setUser(nameController.text, emailController.text,
+                                documentEdited);
                           }).catchError((error) {
-                            print("error");
-                            print(error);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(error),
-                                duration: const Duration(seconds: 5),
+                                elevation: 0,
+                                backgroundColor: Colors.transparent,
+                                content: MessageError(
+                                    text:
+                                        SignupPageText.messageErroText),
+                                duration: Duration(seconds: 3),
                               ),
                             );
                           });
                         }
+                        await Future.delayed(Duration(seconds: 3));
+                        if (isLoading = mounted) {
+                          setState(() {
+                            isLoading = false;
+                          });
+                        }
                       },
-                      child: const Text(
-                        'Cadastrar',
-                        style: TextStyle(
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      child: isLoading
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircularProgressIndicator(
+                                  color: ColorsProject.whiteSilver,
+                                ),
+                              ],
+                            )
+                          : Text(
+                              SignupPageText.continueButton,
+                              style: TextStyle(
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                     ),
                   ),
-                  _divider,
+                  DividerWidget(
+                    altura: 1,
+                  ),
                   _backPage,
                 ],
               ),
@@ -134,81 +195,11 @@ class _SignupPageState extends State<SignupPage> {
           Navigator.pop(context);
         },
         child: const Text(
-          'Voltar',
+          SignupPageText.backButton,
           style: TextStyle(
             fontSize: 16.0,
           ),
         ));
-  }
-
-  Widget _userInformation(String text, dynamic controller, String hint) {
-    return Column(
-      children: [
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 16.0,
-              color: Colors.black,
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 12.0,
-        ),
-        TextFormField(
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: hint,
-            border: const OutlineInputBorder(),
-            contentPadding: const EdgeInsets.fromLTRB(14, 2, 2, 0),
-            enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(width: 2, color: Colors.grey),
-              borderRadius: BorderRadius.circular(6),
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 10.0,
-        ),
-      ],
-    );
-  }
-
-  Widget _pass() {
-    return Column(
-      children: [
-        const Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            'Senha',
-            style: TextStyle(
-              fontSize: 16.0,
-              color: Colors.black,
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 12.0,
-        ),
-        TextFormField(
-          controller: passController,
-          obscureText: true,
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(),
-            contentPadding: const EdgeInsets.fromLTRB(2, 2, 2, 0),
-            enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(width: 2, color: Colors.grey),
-              borderRadius: BorderRadius.circular(6),
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 10.0,
-        ),
-      ],
-    );
   }
 
   Widget _confirmPass() {
@@ -217,7 +208,7 @@ class _SignupPageState extends State<SignupPage> {
         const Align(
           alignment: Alignment.topLeft,
           child: Text(
-            'Confirmar a senha',
+            SignupPageText.titleConfirmPassword,
             style: TextStyle(
               fontSize: 16.0,
               color: Colors.black,
@@ -230,8 +221,8 @@ class _SignupPageState extends State<SignupPage> {
         TextFormField(
           controller: confirmPassController,
           validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "As senhas não conferem";
+            if (value != confirmPass) {
+              return SignupPageText.errorPassword;
             }
             return null;
           },
@@ -252,18 +243,13 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-  Widget get _divider {
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 16.0,
-      ),
-      child: Container(
-        decoration: const BoxDecoration(
-          color: ColorsProject.whiteSilverLow,
-        ),
-        width: 330.0,
-        height: 1.0,
-      ),
-    );
+  _setUser(name, email, cpf) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setString('userName', name);
+    prefs.setString('email', email);
+    prefs.setString('cpf', cpf);
+
+    Navigator.pushNamed(context, AppRouteNames.paymentpage,
+        arguments: nameController.text);
   }
 }

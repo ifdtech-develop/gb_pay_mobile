@@ -47,7 +47,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
         title: const Text(
           'Novo Pagamento',
           style: TextStyle(
-            fontSize: 30.0,
+            fontSize: 24.0,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
@@ -385,7 +385,8 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
         height: 60.0,
         child: ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, AppRouteNames.creditcard);
+            print(widget.ticketInfo.value);
+            Navigator.pushNamed(context, AppRouteNames.creditcard, arguments: widget.ticketInfo.value);
           },
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
