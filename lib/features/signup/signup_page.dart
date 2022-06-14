@@ -11,6 +11,7 @@ import '../../components/signup_components/inputs_components.dart';
 import '../../components/signup_components/password_component.dart';
 import '../../constants/routes.dart';
 import '../../widgets/divider.dart';
+import '../../widgets/loader.dart';
 import '../../widgets/messageError_widget.dart';
 
 class SignupPage extends StatefulWidget {
@@ -94,7 +95,8 @@ class _SignupPageState extends State<SignupPage> {
                     hintText: SignupPageText.hintEmail,
                   ),
                   FormInputsSignup(
-                      controller: addressController, title: SignupPageText.titleAddress),
+                      controller: addressController,
+                      title: SignupPageText.titleAddress),
                   FormInputsSignup(
                     controller: documentUserController,
                     title: SignupPageText.titleDocument,
@@ -144,8 +146,7 @@ class _SignupPageState extends State<SignupPage> {
                                 elevation: 0,
                                 backgroundColor: Colors.transparent,
                                 content: MessageError(
-                                    text:
-                                        SignupPageText.messageErroText),
+                                    text: SignupPageText.messageErroText),
                                 duration: Duration(seconds: 3),
                               ),
                             );
@@ -159,14 +160,7 @@ class _SignupPageState extends State<SignupPage> {
                         }
                       },
                       child: isLoading
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CircularProgressIndicator(
-                                  color: ColorsProject.whiteSilver,
-                                ),
-                              ],
-                            )
+                          ? LoaderWidget()
                           : Text(
                               SignupPageText.continueButton,
                               style: TextStyle(
@@ -249,7 +243,7 @@ class _SignupPageState extends State<SignupPage> {
     prefs.setString('email', email);
     prefs.setString('cpf', cpf);
 
-    Navigator.pushNamed(context, AppRouteNames.paymentpage,
-        arguments: nameController.text);
+                                    Navigator.pushNamed(context, AppRouteNames.paymentpage,
+        arguments: name);
   }
 }

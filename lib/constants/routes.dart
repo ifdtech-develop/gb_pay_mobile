@@ -11,6 +11,7 @@ import 'package:gb_pay_mobile/features/signup/signup_page.dart';
 import 'package:gb_pay_mobile/features/statement/pages/statement_screen.dart';
 import 'package:gb_pay_mobile/features/token/token_page.dart';
 import 'package:gb_pay_mobile/models/paymentCard/paymentCard_model.dart';
+import 'package:gb_pay_mobile/models/signup/signup_model.dart';
 import 'package:gb_pay_mobile/models/ticket_query/ticket_query.dart';
 
 class AppRouteNames {
@@ -45,10 +46,9 @@ class AppRoutes {
           ticketInfo: args as TicketQuery,
         ),
     AppRouteNames.creditcard: (args) => CreditCardScreen(
-      valor: args as int,
+      valor: args as double,
     ),
     AppRouteNames.paymentLocation: (args) => PaymentLocationScreen(
-      paymentInformation: args as PaymentCardModel,
     ),
     AppRouteNames.receipt: (args) => ReceiptScreen(
       valor: args as PaymentCardModel,

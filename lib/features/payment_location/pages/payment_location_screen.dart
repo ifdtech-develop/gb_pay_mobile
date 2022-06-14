@@ -4,11 +4,11 @@ import 'package:gb_pay_mobile/features/payment_location/pages/payment_location_s
 import 'package:gb_pay_mobile/models/paymentCard/paymentCard_model.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
 import 'package:gb_pay_mobile/util/screen.dart';
+import 'package:search_cep/search_cep.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PaymentLocationScreen extends StatefulWidget with Screen {
-  PaymentCardModel paymentInformation;
-  PaymentLocationScreen({Key? key, required this.paymentInformation}) : super(key: key);
+  PaymentLocationScreen({Key? key,}) : super(key: key);
 
   @override
   State<PaymentLocationScreen> createState() => _PaymentLocationScreenState();
@@ -22,6 +22,7 @@ class _PaymentLocationScreenState extends State<PaymentLocationScreen> {
   TextEditingController complementoController = TextEditingController();
   TextEditingController cidadeController = TextEditingController();
   TextEditingController estadoController = TextEditingController();
+  ViaCepInfo infoCep = ViaCepInfo();
 
   late String dropdownValue;
 
@@ -32,9 +33,16 @@ class _PaymentLocationScreenState extends State<PaymentLocationScreen> {
     dropdownValue = dropdownValue = PaymentLocationScreenText.listOfStates[0];
   }
 
+  void pesquisaCep(String cep) async{
+    final infoCep = ViaCepSearchCep();
+    final infoCepJSON = await infoCep.searchInfoByCep(cep: cep);
+    print(infoCepJSON);
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: const Text(
           PaymentLocationScreenText.title,
@@ -53,95 +61,157 @@ class _PaymentLocationScreenState extends State<PaymentLocationScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  PaymentLocationScreenText.estado,
-                  style: TextStyle(
-                    fontSize: 25.0,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    PaymentLocationScreenText.estado,
+                    style: TextStyle(
+                      fontSize: 25.0,
+                    ),
                   ),
-                ),
-                InputDecorator(
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.all(5.0),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: ColorsProject.strongGrey,
+                  InputDecorator(
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.all(5.0),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: ColorsProject.strongGrey,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: ColorsProject.strongGrey,
+                        ),
                       ),
                     ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: ColorsProject.strongGrey,
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: dropdownValue,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropdownValue = newValue!;
+                          });
+                        },
+                        items: PaymentLocationScreenText.listOfStates
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
                       ),
                     ),
                   ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: dropdownValue,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownValue = newValue!;
-                        });
-                      },
-                      items: PaymentLocationScreenText.listOfStates
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            FormInputs(
-              numeroCartaoController: cepController,
-              title: PaymentLocationScreenText.cep,
-            ),
-            FormInputs(
-              numeroCartaoController: bairroController,
-              title: PaymentLocationScreenText.bairro,
-            ),
-            FormInputs(
-              numeroCartaoController: enderecoController,
-              title: PaymentLocationScreenText.endereco,
-            ),
-            FormInputs(
-              numeroCartaoController: numeroController,
-              title: PaymentLocationScreenText.numero,
-            ),
-            FormInputs(
-              numeroCartaoController: complementoController,
-              title: PaymentLocationScreenText.complemento,
-            ),
-            FormInputs(
-              numeroCartaoController: cidadeController,
-              title: PaymentLocationScreenText.cidade,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 60.0,
-              child: ElevatedButton(
-                onPressed: () {
-                  widget.navigator.pushNamed(AppRouteNames.receipt, arguments: PaymentCardModel());
-                },
-                child: const Text(
-                  'Pagar',
-                  style: TextStyle(fontSize: 28.0),
-                ),
+                  SizedBox(height: 12.0,),
+                ],
               ),
-            )
-          ],
+              FormInputsCEP(
+                numeroCartaoController: bairroController,
+                title: PaymentLocationScreenText.cep,
+              ),
+              FormInputs(
+                numeroCartaoController: enderecoController,
+                title: PaymentLocationScreenText.endereco,
+              ),
+              FormInputs(
+                numeroCartaoController: numeroController,
+                title: PaymentLocationScreenText.numero,
+              ),
+              FormInputs(
+                numeroCartaoController: complementoController,
+                title: PaymentLocationScreenText.complemento,
+              ),
+              FormInputs(
+                numeroCartaoController: cidadeController,
+                title: PaymentLocationScreenText.cidade,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 60.0,
+                child: ElevatedButton(
+                  onPressed: () {
+                    widget.navigator.pushNamed(AppRouteNames.receipt, arguments: PaymentCardModel());
+                  },
+                  child: const Text(
+                    'Pagar',
+                    style: TextStyle(fontSize: 28.0),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }}
 
+
+class FormInputsCEP extends StatelessWidget {
+  void pesquisaCep(String cep) async{
+    final viaCepSearchCep = ViaCepSearchCep();
+    final infoCepJSON = await viaCepSearchCep.searchInfoByCep(cep: cep);
+    print(infoCepJSON);
+}
+  final TextEditingController numeroCartaoController;
+  final String title;
+
+  const FormInputsCEP({
+    Key? key,
+    required this.numeroCartaoController,
+    required this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'CEP',
+          style: const TextStyle(
+            fontSize: 25.0,
+          ),
+        ),
+        TextFormField(
+          onChanged: ((value) => pesquisaCep(numeroCartaoController.text)),
+          controller: numeroCartaoController,
+          decoration: const InputDecoration(
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorsProject.strongGrey,
+              ),
+            ),
+            // Border quando usuario clica no input
+            border: OutlineInputBorder(),
+          ),
+        ),
+        SizedBox(height: 12.0,),
+        Text(
+          'Bairro',
+          style: const TextStyle(
+            fontSize: 25.0,
+          ),
+        ),
+        TextFormField(
+          controller: numeroCartaoController,
+          decoration: const InputDecoration(
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorsProject.strongGrey,
+              ),
+            ),
+            // Border quando usuario clica no input
+            border: OutlineInputBorder(),
+          ),
+        ),
+      ],
+    );
+  }
+}
 
 class FormInputs extends StatelessWidget {
   final TextEditingController numeroCartaoController;
@@ -176,6 +246,7 @@ class FormInputs extends StatelessWidget {
             border: OutlineInputBorder(),
           ),
         ),
+        SizedBox(height: 12.0,),
       ],
     );
   }

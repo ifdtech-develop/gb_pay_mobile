@@ -1,3 +1,4 @@
+import 'package:boleto/boleto.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -9,6 +10,7 @@ import 'package:gb_pay_mobile/util/screen.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../../constants/routes.dart';
+import '../../../widgets/loader.dart';
 
 class CodeBarPage extends StatefulWidget with Screen {
   CodeBarPage({Key? key}) : super(key: key);
@@ -297,14 +299,7 @@ class _CodeBarPageState extends State<CodeBarPage> {
           elevation: 0,
         ),
         child: isLoading
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    color: ColorsProject.whiteSilver,
-                  ),
-                ],
-              )
+            ? const LoaderWidget()
             : const Text(
                 CodeBarText.nextButton,
                 style: TextStyle(

@@ -75,10 +75,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
           Column(
             children: [
               _payAccount,
-              // _cardParcel,
               _divider,
-              // _checkBox,
-              // _divider,
               _mountInfoPage,
             ],
           ),
@@ -130,7 +127,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
                     top: 8.0,
                   ),
                   child: Text(
-                    'R\$ ${widget.ticketInfo.value.toString()}',
+                    'R\$ ${widget.ticketInfo.value}',
                     style: const TextStyle(
                       color: ColorsProject.green,
                       fontWeight: FontWeight.bold,
@@ -146,177 +143,6 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
     );
   }
 
-  Widget get _cardParcel {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 112.0,
-        top: 16.0,
-        bottom: 8.0,
-      ),
-      child: Row(
-        children: [
-          Column(
-            children: const [
-              Icon(
-                Icons.credit_card,
-                color: ColorsProject.blueWhite,
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 8.0,
-            ),
-            child: Column(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: 2.0,
-                    left: 2.0,
-                  ),
-                  child: Text(
-                    'Parcelamento:',
-                    style: TextStyle(
-                      color: ColorsProject.whiteSilver,
-                      fontSize: 20.0,
-                    ),
-                  ),
-                ),
-                Text(
-                  '2x de R\$ 5,51',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.normal,
-                    fontSize: 20.0,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 48.0,
-            ),
-            child: Column(
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Image.asset(
-                    AppAssets.arrowIcon,
-                  ),
-                  iconSize: 20.0,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget get _checkBox {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.8,
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Checkbox(
-                    checkColor: Colors.white,
-                    value: _checkToday,
-                    shape: const CircleBorder(),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _checkToday = value!;
-                      });
-                    },
-                  ),
-                  const Text(
-                    'Pagar hoje',
-                    style: TextStyle(fontSize: 25.0),
-                  ),
-                ],
-              ),
-              Text(
-                DateFormat("dd/MM/yyyy").format(data),
-                style: const TextStyle(fontSize: 20.0),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Checkbox(
-                    checkColor: Colors.white,
-                    value: _checkOther,
-                    shape: const CircleBorder(),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _checkOther = value!;
-                      });
-                    },
-                  ),
-                  const Text(
-                    'Agendar',
-                    style: TextStyle(fontSize: 25.0),
-                  ),
-                ],
-              ),
-              TextButton(
-                child: const Text(
-                  'Escolher data',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: ColorsProject.blueWhite,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-                onPressed: () {
-                  Future<void> _selectDate(BuildContext context) async {
-                    final DateTime? picked = await showDatePicker(
-                      builder: ((context, child) {
-                        return Theme(
-                          data: Theme.of(context).copyWith(
-                            colorScheme: const ColorScheme.light(
-                              primary: ColorsProject
-                                  .blueWhite, // header background color
-                              onPrimary: Colors.black, // header text color
-                              onSurface: Colors.black, // body text color
-                            ),
-                            textButtonTheme: TextButtonThemeData(
-                              style: TextButton.styleFrom(
-                                primary: Colors.black, // button text color
-                              ),
-                            ),
-                          ),
-                          child: child!,
-                        );
-                      }),
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1990),
-                      lastDate: DateTime(2030),
-                    );
-                    if (picked != null && picked != data) {
-                      setState(() {
-                        data = picked;
-                      });
-                    }
-                  }
-                },
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
 
   Widget get _mountInfoPage {
     return Column(
@@ -325,9 +151,6 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
         infoPage('Beneficiário', widget.ticketInfo.assignor),
         infoPage('Vencimento', widget.ticketInfo.dueDate ?? 'Sem Vencimento'),
         infoPage('Forma de pagamento', 'Cartão de crédito'),
-        // infoPage('Taxa de conveniência do cartão', 'R\$ 0,40'),
-        // infoPage('Taxa de parcelamento', 'R\$ 0,62'),
-        // infoPage('Parcelas', '2x de R\$ 5,51'),
       ],
     );
   }
@@ -345,7 +168,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
             Text(
               info,
               style: const TextStyle(
-                fontSize: 16.0,
+                fontSize: 18.0,
                 color: ColorsProject.whiteSilver,
                 fontWeight: FontWeight.normal,
               ),
@@ -353,7 +176,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
             Text(
               '$infoSupply',
               style: const TextStyle(
-                fontSize: 12.0,
+                fontSize: 18.0,
                 color: ColorsProject.whiteSilver,
                 fontWeight: FontWeight.bold,
               ),
@@ -396,7 +219,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
             elevation: 0,
           ),
           child: const Text(
-            'Próximo',
+            'Confirmar',
             style: TextStyle(
               color: Colors.white,
               fontSize: 28.0,
