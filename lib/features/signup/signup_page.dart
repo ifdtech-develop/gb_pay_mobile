@@ -243,7 +243,6 @@ class _SignupPageState extends State<SignupPage> {
     prefs.setString('email', email);
     prefs.setString('cpf', cpf);
 
-                                    Navigator.pushNamed(context, AppRouteNames.paymentpage,
-        arguments: name);
+    Navigator.pushNamed(context, AppRouteNames.signin, arguments: name);
   }
 }

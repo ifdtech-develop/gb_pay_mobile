@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
 import '../../util/colors.dart';
@@ -8,6 +9,9 @@ class FormInputs extends StatelessWidget {
   final String title;
   final IconData icon;
   final String validator;
+  final List<TextInputFormatter> mask;
+  final TextInputType type;
+  final int length;
 
   const FormInputs({
     Key? key,
@@ -15,6 +19,9 @@ class FormInputs extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.validator,
+    required this.type,
+    this.mask = const [],
+    this.length = 20,
   }) : super(key: key);
 
   @override
@@ -29,10 +36,14 @@ class FormInputs extends StatelessWidget {
           ),
         ),
         TextFormField(
+          keyboardType: type,
+          inputFormatters: mask,
+          maxLength: length,
           controller: numeroCartaoController,
           validator:
               RequiredValidator(errorText: 'Por favor, insira o $validator'),
           decoration: InputDecoration(
+            counterText: '',
             prefixIcon: Icon(
               icon,
               color: ColorsProject.blueWhite,

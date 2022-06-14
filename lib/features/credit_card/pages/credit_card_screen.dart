@@ -8,6 +8,7 @@ import 'package:gb_pay_mobile/use_cases/fees.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
 import 'package:gb_pay_mobile/util/screen.dart';
 import 'package:gb_pay_mobile/widgets/loader.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../components/credit_card_components/form_inputs_components.dart';
@@ -32,6 +33,10 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
   int month = 0;
   int year = 0;
   int installment = 0;
+  var maskFormatterCard = MaskTextInputFormatter(
+      mask: '#### #### #### ####', type: MaskAutoCompletionType.lazy);
+  var maskFormatterCPF = MaskTextInputFormatter(
+      mask: '###.###.###-##', type: MaskAutoCompletionType.lazy);
 
   //String dropdownValue = CreditCardScreenText.listOfParcels[0];
   final _formKey = GlobalKey<FormState>();
@@ -122,6 +127,10 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                               _dropdownValue = newValue;
                               numeroParcelasController.text =
                                   _dropdownValue.substring(0, 1);
+<<<<<<< Updated upstream
+=======
+                              print(numeroParcelasController.text);
+>>>>>>> Stashed changes
                             });
                           },
                           items: listOfParcels
@@ -140,6 +149,9 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                 title: CreditCardScreenText.cartao,
                 icon: Icons.credit_card,
                 validator: 'número de cartão',
+                length: 20,
+                mask: [maskFormatterCard],
+                type: TextInputType.number,
               ),
               Row(
                 children: [
@@ -149,6 +161,8 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                       title: 'Mês',
                       icon: Icons.calendar_month_outlined,
                       validator: 'o mês',
+                      type: TextInputType.number,
+                      length: 2,
                     ),
                   ),
                   Expanded(
@@ -159,6 +173,8 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                         title: 'Ano',
                         icon: Icons.calendar_month_outlined,
                         validator: 'o ano',
+                        type: TextInputType.number,
+                        length: 2,
                       ),
                     ),
                   ),
@@ -170,6 +186,8 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                         title: CreditCardScreenText.cvv,
                         icon: Icons.lock_open_outlined,
                         validator: 'o cvv',
+                        type: TextInputType.number,
+                        length: 3,
                       ),
                     ),
                   ),
@@ -180,12 +198,16 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                 title: CreditCardScreenText.nomeImpresso,
                 icon: Icons.person_outline,
                 validator: 'o nome',
+                type: TextInputType.name,
               ),
               FormInputs(
                 numeroCartaoController: cpfCnpjController,
                 title: CreditCardScreenText.cpfCnpj,
                 icon: Icons.badge_outlined,
                 validator: 'o cpf',
+                type: TextInputType.number,
+                mask: [maskFormatterCPF],
+                length: 15,
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
@@ -203,6 +225,14 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                       month = int.parse(validadeMonthController.text);
                       year = int.parse(validadeYearController.text);
                       installment = int.parse(numeroParcelasController.text);
+
+                      var newCardEdit = numeroCartaoController.text;
+                      newCardEdit = newCardEdit.replaceAll(' ', '');
+
+                      var cpf = cpfCnpjController.text;
+                      cpf = cpf.replaceAll('.', '');
+                      cpf = cpf.replaceAll('-', '');
+
                       setState(() {
                         isLoading = true;
                       });
@@ -210,9 +240,9 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                       if (installment > 1) {
                         jsonCode = {
                           'card': {
-                            'cardNumber': numeroCartaoController.text,
+                            'cardNumber': newCardEdit,
                             'cardHolder': nomeController.text,
-                            'cardHolderDocument': cpfCnpjController.text,
+                            'cardHolderDocument': cpf,
                             'expirationMonth': month,
                             'expirationYear': year,
                             'securityCode': cvvController.text,
