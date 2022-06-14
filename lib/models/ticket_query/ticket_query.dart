@@ -9,7 +9,7 @@ class TicketQuery {
   String? digitable;
   int? transactionId;
   int? type;
-  int? value;
+  double? value;
   Null? maxValue;
   Null? minValue;
   String? errorCode;

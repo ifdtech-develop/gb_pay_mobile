@@ -1,19 +1,24 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:gb_pay_mobile/constants/routes.dart';
 import 'package:gb_pay_mobile/features/credit_card/pages/credit_card_screen.text.dart';
+import 'package:gb_pay_mobile/use_cases/fees.dart';
 import 'package:gb_pay_mobile/models/paymentCard/paymentCard_model.dart';
 import 'package:gb_pay_mobile/services/paymentCard_dto.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
 
 import 'package:gb_pay_mobile/util/screen.dart';
+import 'package:gb_pay_mobile/widgets/loader.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../components/credit_card_components/form_inputs_components.dart';
 import '../../../models/ticket_query/ticket_query.dart';
 
 class CreditCardScreen extends StatefulWidget with Screen {
-  final int valor;
+  final double valor;
   CreditCardScreen({Key? key, required this.valor}) : super(key: key);
 
   @override
@@ -28,13 +33,20 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
   TextEditingController cvvController = TextEditingController();
   TextEditingController nomeController = TextEditingController();
   TextEditingController cpfCnpjController = TextEditingController();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  int month = 0;
+  int year = 0;
+  int installment = 0;
 
   //String dropdownValue = CreditCardScreenText.listOfParcels[0];
   final _formKey = GlobalKey<FormState>();
   PaymentCardDTO _paymentCard = PaymentCardDTO();
   PaymentCardModel _payment = PaymentCardModel();
-
+  List<double> fees = CreditCardScreenText.listOfFees;
+  List<double> result = [];
+  late List<String> listOfParcels = [];
   bool isLoading = false;
+  String _dropdownValue = '';
 
   @override
   void initState() {
@@ -45,6 +57,10 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
         isLoading = false;
       },
     );
+    List<double> fees = CreditCardScreenText.listOfFees;
+    List<double> result = [];
+    fessCalculate(result, widget.valor, fees, listOfParcels);
+    
   }
 
   @override
@@ -55,13 +71,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> listOfParcels = [
-      '1x de R\$ ${widget.valor.toDouble().toStringAsFixed(2)}',
-      '2x de R\$ ${(widget.valor.toDouble() / 2).toStringAsFixed(2)}, total de R\$ ${widget.valor.toDouble().toStringAsFixed(2)}',
-      '3x de R\$ ${(widget.valor.toDouble() / 3).toStringAsFixed(2)}, total de ${widget.valor.toDouble().toStringAsFixed(2)}',
-      '4x de R\$ ${(widget.valor.toDouble() / 4).toStringAsFixed(2)}, total de R\$ ${widget.valor.toDouble().toStringAsFixed(2)}'
-    ];
-    String dropdownValue = listOfParcels[0];
+    String _dropdownValue = listOfParcels[0];
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -110,23 +120,27 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                         ),
                       ),
                     ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: dropdownValue,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropdownValue = newValue!;
-                          });
-                        },
-                        items: listOfParcels
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                    child:
+                          DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: _dropdownValue,
+                              onChanged: (dynamic newValue) {
+                                setState(() {
+                                  _dropdownValue = newValue;
+                                  numeroParcelasController.text =
+                                      _dropdownValue.substring(0, 1);
+                                });
+                              },
+                              items: listOfParcels
+                                  .map<DropdownMenuItem<String>>(
+                                      (dynamic value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+                          )
                   ),
                 ],
               ),
@@ -195,24 +209,61 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                           "5") {
                         brandType = 'mastercard';
                       }
+                      month = int.parse(validadeMonthController.text);
+                      year = int.parse(validadeYearController.text);
+                      installment = int.parse(numeroParcelasController.text);
                       setState(() {
                         isLoading = true;
                       });
-                      _paymentCard
-                          .payment(
-                            numeroCartaoController.text,
-                            nomeController.text,
-                            cpfCnpjController.text,
-                            7,
-                            26,
-                            cvvController.text,
-                            brandType,
-                            widget.valor,
-                          )
-                          .then((value) {
-                             widget.navigator.pushNamed(AppRouteNames.receipt, arguments: value);
-                          })
-                          .catchError((error) {
+                      var jsonCode = {};
+                      if (installment > 1) {
+                        jsonCode = {
+                          'card': {
+                            'cardNumber': numeroCartaoController.text,
+                            'cardHolder': nomeController.text,
+                            'cardHolderDocument': cpfCnpjController.text,
+                            'expirationMonth': month,
+                            'expirationYear': year,
+                            'securityCode': cvvController.text,
+                            'brand': 'visa',
+                          },
+                          'payment': {
+                            'documentNumber': cpfCnpjController.text,
+                            'amount': result[installment - 1].toInt(),
+                            'installments': installment,
+                          },
+                          'customer': {
+                            'firstName': nomeController.text,
+                            'lastName': nomeController.text,
+                            'documentNumber': '76600763000135',
+                          }
+                        };
+                      } else if (installment == 1) {
+                        jsonCode = {
+                          'card': {
+                            'cardNumber': numeroCartaoController.text,
+                            'cardHolder': nomeController.text,
+                            'cardHolderDocument': cpfCnpjController.text,
+                            'expirationMonth': month,
+                            'expirationYear': year,
+                            'securityCode': cvvController.text,
+                            'brand': 'visa',
+                          },
+                          'payment': {
+                            'documentNumber': cpfCnpjController.text,
+                            'amount': result[installment - 1].toInt(),
+                          },
+                          'customer': {
+                            'firstName': nomeController.text,
+                            'lastName': nomeController.text,
+                            'documentNumber': '76600763000135',
+                          }
+                        };
+                      }
+                      _paymentCard.payment(jsonCode).then((value) {
+                        widget.navigator
+                            .pushNamed(AppRouteNames.receipt, arguments: value);
+                      }).catchError((error) {
                         print(error);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -222,8 +273,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                             duration: Duration(seconds: 3),
                           ),
                         );
-                      }
-                      );
+                      });
                     }
                     await Future.delayed(Duration(seconds: 3));
                     if (isLoading = mounted) {
@@ -233,14 +283,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                     }
                   },
                   child: isLoading
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircularProgressIndicator(
-                              color: ColorsProject.whiteSilver,
-                            ),
-                          ],
-                        )
+                      ? LoaderWidget()
                       : const Text(
                           'Continuar',
                           style: TextStyle(fontSize: 28.0),
@@ -252,5 +295,10 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
         ),
       ),
     );
+  }
+
+  _setInstallment(installment) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setInt('installments', installment);
   }
 }

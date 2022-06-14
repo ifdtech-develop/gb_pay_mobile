@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:gb_pay_mobile/components/signup_components/password_component.dart';
 import 'package:gb_pay_mobile/constants/routes.dart';
 import 'package:gb_pay_mobile/features/signin/signin_page.text.dart';
 import 'package:gb_pay_mobile/services/signin_dto.dart';
@@ -10,6 +11,8 @@ import 'package:gb_pay_mobile/widgets/messageError_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/signin_components/form_inputs_components.dart';
+import '../../components/signin_components/form_inputs_password.dart';
+import '../../widgets/loader.dart';
 import '../../widgets/new_account.dart';
 
 class SigninPage extends StatefulWidget with Screen {
@@ -84,7 +87,7 @@ class _SigninPageState extends State<SigninPage> {
                   const SizedBox(
                     height: 32.0,
                   ),
-                  FormInputs(
+                  FormInputsPassword(
                     controller: passwordController,
                     title: SigninPageText.titlePassword,
                     obscure: true,
@@ -130,14 +133,7 @@ class _SigninPageState extends State<SigninPage> {
                         }
                       },
                       child: isLoading
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CircularProgressIndicator(
-                                  color: ColorsProject.whiteSilver,
-                                ),
-                              ],
-                            )
+                          ? LoaderWidget()
                           : Text(
                               SigninPageText.continuePage,
                               style: TextStyle(

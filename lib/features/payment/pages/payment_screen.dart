@@ -7,6 +7,9 @@ import 'package:gb_pay_mobile/util/assets.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
 import 'package:gb_pay_mobile/util/screen.dart';
 
+import '../../../models/signup/signup_model.dart';
+import '../../../widgets/drawer.dart';
+
 class PaymentPage extends StatefulWidget with Screen {
   final String user;
 
@@ -55,75 +58,7 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: Drawer(
-        backgroundColor: const Color(0xFF00C0FF),
-        child: Padding(
-          padding: const EdgeInsets.only(
-            top: 72.0,
-          ),
-          child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: [
-              ListTile(
-                leading: const Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                title: const Text(
-                  'Perfil do usuário',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                },
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.money,
-                  color: Colors.white,
-                ),
-                hoverColor: Colors.white70,
-                title: const Text(
-                  'Extrato',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17.0,
-                    color: Colors.white,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushNamed(context, AppRouteNames.statement);
-                },
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.exit_to_app,
-                  color: Colors.white,
-                ),
-                hoverColor: Colors.white70,
-                title: const Text(
-                  'Sair',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17.0,
-                    color: Colors.white,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushNamed(context, AppRouteNames.greetings);
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
+      endDrawer: const DrawerGBPay(),
       appBar: AppBar(
         centerTitle: true,
         leading: Image.asset(
@@ -234,7 +169,7 @@ class _PaymentPageState extends State<PaymentPage> {
           child: const Text(
             PaymentScreenText.useReaderCode,
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.white,
               fontSize: 25.0,
               fontWeight: FontWeight.normal,
             ),
@@ -262,7 +197,7 @@ class _PaymentPageState extends State<PaymentPage> {
         child: const Text(
           PaymentScreenText.enterCode,
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 25.0,
             fontWeight: FontWeight.normal,
           ),

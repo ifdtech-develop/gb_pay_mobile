@@ -44,6 +44,8 @@ dependencies:
   shared_preferences: ^2.0.15
   form_field_validator: ^1.1.0
   cpf_cnpj_validator: ^2.0.0
+  search_cep: ^4.0.0+1
+  boleto: ^0.0.1
 
 flutter_native_splash:
   color: '#00C0FF' #blue color
