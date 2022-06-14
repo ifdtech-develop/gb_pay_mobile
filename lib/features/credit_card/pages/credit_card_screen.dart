@@ -1,21 +1,16 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 import 'package:gb_pay_mobile/constants/routes.dart';
 import 'package:gb_pay_mobile/features/credit_card/pages/credit_card_screen.text.dart';
-import 'package:gb_pay_mobile/use_cases/fees.dart';
 import 'package:gb_pay_mobile/models/paymentCard/paymentCard_model.dart';
 import 'package:gb_pay_mobile/services/paymentCard_dto.dart';
+import 'package:gb_pay_mobile/use_cases/fees.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
-
 import 'package:gb_pay_mobile/util/screen.dart';
 import 'package:gb_pay_mobile/widgets/loader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../components/credit_card_components/form_inputs_components.dart';
-import '../../../models/ticket_query/ticket_query.dart';
 
 class CreditCardScreen extends StatefulWidget with Screen {
   final double valor;
@@ -60,7 +55,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
     List<double> fees = CreditCardScreenText.listOfFees;
     List<double> result = [];
     fessCalculate(result, widget.valor, fees, listOfParcels);
-    
+    _dropdownValue = listOfParcels[0];
   }
 
   @override
@@ -71,7 +66,6 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String _dropdownValue = listOfParcels[0];
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -107,41 +101,38 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                     ),
                   ),
                   InputDecorator(
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(5.0),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: ColorsProject.strongGrey,
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.all(5.0),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: ColorsProject.strongGrey,
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: ColorsProject.strongGrey,
+                          ),
                         ),
                       ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: ColorsProject.strongGrey,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: _dropdownValue,
+                          onChanged: (dynamic newValue) {
+                            setState(() {
+                              _dropdownValue = newValue;
+                              numeroParcelasController.text =
+                                  _dropdownValue.substring(0, 1);
+                            });
+                          },
+                          items: listOfParcels
+                              .map<DropdownMenuItem<String>>((dynamic value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
                         ),
-                      ),
-                    ),
-                    child:
-                          DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: _dropdownValue,
-                              onChanged: (dynamic newValue) {
-                                setState(() {
-                                  _dropdownValue = newValue;
-                                  numeroParcelasController.text =
-                                      _dropdownValue.substring(0, 1);
-                                });
-                              },
-                              items: listOfParcels
-                                  .map<DropdownMenuItem<String>>(
-                                      (dynamic value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                            ),
-                          )
-                  ),
+                      )),
                 ],
               ),
               FormInputs(
