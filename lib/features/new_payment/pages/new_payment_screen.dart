@@ -4,6 +4,7 @@ import 'package:gb_pay_mobile/models/ticket_query/ticket_query.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
 import 'package:intl/intl.dart';
 
+import '../../../shared/new_payment/new_payment_preferences.dart';
 import '../../../util/assets.dart';
 
 class NewPaymentPage extends StatefulWidget {
@@ -56,18 +57,6 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
         toolbarHeight: 100,
         iconTheme:
             const IconThemeData(color: ColorsProject.blueWhite, size: 40.0),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(
-              right: 64.0,
-            ),
-            child: Icon(
-              Icons.info,
-              color: ColorsProject.green,
-              size: 32.0,
-            ),
-          )
-        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -127,7 +116,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
                     top: 8.0,
                   ),
                   child: Text(
-                    'R\$ ${widget.ticketInfo.value}',
+                    'R\$ ${widget.ticketInfo.value.toString().replaceAll('.', ',')}',
                     style: const TextStyle(
                       color: ColorsProject.green,
                       fontWeight: FontWeight.bold,
@@ -209,6 +198,8 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
         child: ElevatedButton(
           onPressed: () {
             print(widget.ticketInfo.value);
+            NewPaymentPreferencs.setAssignor(widget.ticketInfo.assignor);
+            NewPaymentPreferencs.setTransactionId(widget.ticketInfo.transactionId);
             Navigator.pushNamed(context, AppRouteNames.creditcard, arguments: widget.ticketInfo.value);
           },
           style: ElevatedButton.styleFrom(

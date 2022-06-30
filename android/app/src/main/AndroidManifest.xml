@@ -2,7 +2,7 @@
     package="com.example.gb_pay_mobile">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="gb_pay_mobile"
+        android:label="GB Pay"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

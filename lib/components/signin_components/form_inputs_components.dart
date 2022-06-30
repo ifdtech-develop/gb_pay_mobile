@@ -46,7 +46,7 @@ class FormInputs extends StatelessWidget {
             border: const OutlineInputBorder(),
             hintText: hintText,
             contentPadding:
-                const EdgeInsets.symmetric(vertical: 20, horizontal: 4),
+                const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
             enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(width: 2, color: Colors.grey),
               borderRadius: BorderRadius.circular(6),

@@ -4,7 +4,10 @@ import 'package:gb_pay_mobile/features/credit_card/pages/credit_card_screen.dart
 import 'package:gb_pay_mobile/features/greetings/greetings_page.dart';
 import 'package:gb_pay_mobile/features/new_payment/pages/new_payment_screen.dart';
 import 'package:gb_pay_mobile/features/payment/pages/payment_screen.dart';
+import 'package:gb_pay_mobile/features/payment_loading/payment_loading.dart';
 import 'package:gb_pay_mobile/features/payment_location/pages/payment_location_screen.dart';
+import 'package:gb_pay_mobile/features/payment_summary/payment_summary_page.dart';
+import 'package:gb_pay_mobile/features/perfil_user/perfil_user_page.dart';
 import 'package:gb_pay_mobile/features/receipt/pages/receipt_screen.dart';
 import 'package:gb_pay_mobile/features/signin/signin_page.dart';
 import 'package:gb_pay_mobile/features/signup/signup_page.dart';
@@ -13,6 +16,9 @@ import 'package:gb_pay_mobile/features/token/token_page.dart';
 import 'package:gb_pay_mobile/models/paymentCard/paymentCard_model.dart';
 import 'package:gb_pay_mobile/models/signup/signup_model.dart';
 import 'package:gb_pay_mobile/models/ticket_query/ticket_query.dart';
+
+import '../models/confirm_payment/confirm_payment_model.dart';
+import '../models/confirm_payment_system/confirm_payment_system.dart';
 
 class AppRouteNames {
   static const String splash = '/';
@@ -30,6 +36,9 @@ class AppRouteNames {
   static const String paymentLocation = '/paymentLocation';
   static const String receipt = '/receipt';
   static const String statement = '/statement';
+  static const String paymentSummary = '/paymentSummary';
+  static const String perfilUser = 'perfilUser';
+  static const String loadingPayment = 'loadingPayment';
 }
 
 class AppRoutes {
@@ -51,8 +60,12 @@ class AppRoutes {
     AppRouteNames.paymentLocation: (args) => PaymentLocationScreen(
     ),
     AppRouteNames.receipt: (args) => ReceiptScreen(
-      valor: args as PaymentCardModel,
+      realizePayment: args as ConfirmPaymentModel,
     ),
     AppRouteNames.statement: (_) => const StatementPage(),
+    AppRouteNames.paymentSummary: (_) => const PaymentSummaryPage(),
+    AppRouteNames.perfilUser: (_) => const PerfilUserPage(),
+    AppRouteNames.loadingPayment: (_) => PaymentLoadingPage(
+    ),
   };
 }

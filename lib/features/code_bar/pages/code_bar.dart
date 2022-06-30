@@ -8,9 +8,12 @@ import 'package:gb_pay_mobile/util/assets.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
 import 'package:gb_pay_mobile/util/screen.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../../../constants/routes.dart';
+import '../../../shared/code_bar/code_bar_preferences.dart';
 import '../../../widgets/loader.dart';
+import '../../../widgets/messageError_widget.dart';
 
 class CodeBarPage extends StatefulWidget with Screen {
   CodeBarPage({Key? key}) : super(key: key);
@@ -52,6 +55,9 @@ class _CodeBarPageState extends State<CodeBarPage> {
       //
 
       _ticketQueryDTO.ticketQuery(codeBarType, '', data).then((value) {
+        CodeBarPreferencs.setCodeBar(data);
+        CodeBarPreferencs.setCodeBarType(codeBarType.toInt());
+        CodeBarPreferencs.setDigitable(data);
         print('value on scan');
         print(value);
         widget.navigator.pushNamed(
@@ -83,47 +89,53 @@ class _CodeBarPageState extends State<CodeBarPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          CodeBarText.title,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        toolbarHeight: 100,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        iconTheme:
-            const IconThemeData(color: ColorsProject.blueWhite, size: 40.0),
-        actions: [
-          IconButton(
-            onPressed: () {
-              scanCodeBar();
-            },
-            icon: Image.asset(
-              AppAssets.cameraIcon,
-              color: ColorsProject.blueWhite,
+    return ModalProgressHUD(
+      inAsyncCall: isLoading,
+      progressIndicator: const CircularProgressIndicator(
+        color: ColorsProject.blueWhite,
+      ),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            CodeBarText.title,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
             ),
           ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          top: 50.0,
+          centerTitle: true,
+          toolbarHeight: 100,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          iconTheme:
+              const IconThemeData(color: ColorsProject.blueWhite, size: 40.0),
+          actions: [
+            IconButton(
+              onPressed: () {
+                scanCodeBar();
+              },
+              icon: Image.asset(
+                AppAssets.cameraIcon,
+                color: ColorsProject.blueWhite,
+              ),
+            ),
+          ],
         ),
-        child: SizedBox(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                _codeBar(context),
-                _description(context),
-                _continueButton,
-              ],
+        body: Padding(
+          padding: const EdgeInsets.only(
+            top: 50.0,
+          ),
+          child: SizedBox(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  _codeBar(context),
+                  _description(context),
+                  _continueButton,
+                ],
+              ),
             ),
           ),
         ),
@@ -276,18 +288,28 @@ class _CodeBarPageState extends State<CodeBarPage> {
             _ticketQueryDTO
                 .ticketQuery(codeBarType, codeBarEdited, '')
                 .then((value) {
+              CodeBarPreferencs.setCodeBar(codeBarEdited);
+              CodeBarPreferencs.setCodeBarType(codeBarType.toInt());
+              CodeBarPreferencs.setDigitable(codeBarEdited);
+              CodeBarPreferencs.setCodeBarOriginal(codeBarController.text);
               widget.navigator.pushNamed(
                 AppRouteNames.newPaymentPage,
                 arguments: value,
               );
             }).catchError((error) {
-              print(error);
-            });
-          }
-          await Future.delayed(Duration(seconds: 3));
-          if (isLoading = mounted) {
-            setState(() {
+              setState(() {
               isLoading = false;
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  elevation: 0,
+                                  backgroundColor: Colors.transparent,
+                                  content: MessageError(
+                                    text: 'Houve um erro, tente novamente!',
+                                  ),
+                                  duration: Duration(seconds: 3),
+                                ),
+                              );
             });
           }
         },
@@ -298,9 +320,7 @@ class _CodeBarPageState extends State<CodeBarPage> {
           primary: ColorsProject.blueWhite,
           elevation: 0,
         ),
-        child: isLoading
-            ? const LoaderWidget()
-            : const Text(
+        child: const Text(
                 CodeBarText.nextButton,
                 style: TextStyle(
                   color: Colors.white,

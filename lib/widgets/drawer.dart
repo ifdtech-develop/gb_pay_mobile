@@ -33,9 +33,7 @@ class DrawerGBPay extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
+                  Navigator.pushNamed(context, AppRouteNames.perfilUser);
                 },
               ),
               ListTile(

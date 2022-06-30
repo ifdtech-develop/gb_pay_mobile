@@ -20,7 +20,7 @@ class FormInputsSignup extends StatelessWidget {
     this.hintText = '',
     this.obscure = false,
     this.mask = const [],
-    this.length = 20,
+    this.length = 60,
   }) : super(key: key);
 
   @override
@@ -44,6 +44,7 @@ class FormInputsSignup extends StatelessWidget {
           maxLength: length,
           inputFormatters: mask,
           controller: controller,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           validator:
               RequiredValidator(errorText: 'Por favor, insira um $title'),
           decoration: InputDecoration(

@@ -1,27 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:gb_pay_mobile/features/receipt/pages/receipt_screen.text.dart';
-import 'package:gb_pay_mobile/models/paymentCard/paymentCard_model.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
 import 'package:gb_pay_mobile/util/screen.dart';
+import 'package:intl/intl.dart';
 
-import '../../../models/ticket_query/ticket_query.dart';
+import '../../../models/confirm_payment/confirm_payment_model.dart';
+import '../../../services/confirm_payment.dart';
+import '../../../shared/code_bar/code_bar_preferences.dart';
+import '../../../shared/confirm_payment/confirm_payment_preferences.dart';
+import '../../../shared/credit_card/credit_card_data_preferences.dart';
+import '../../../shared/new_payment/new_payment_preferences.dart';
 
 class ReceiptScreen extends StatefulWidget with Screen {
-  final PaymentCardModel valor;
-  ReceiptScreen({Key? key, required this.valor}) : super(key: key);
+  final ConfirmPaymentModel realizePayment;
+  ReceiptScreen({
+    Key? key, required this.realizePayment
+  }) : super(key: key);
 
   @override
   State<ReceiptScreen> createState() => _ReceiptScreenState();
 }
 
 class _ReceiptScreenState extends State<ReceiptScreen> {
+  ConfirmPaymentDTO _confirmPaymentSystem = ConfirmPaymentDTO();
   TextEditingController numeroParcelasController = TextEditingController();
   TextEditingController numeroCartaoController = TextEditingController();
   TextEditingController validadeController = TextEditingController();
   TextEditingController cvvController = TextEditingController();
   TextEditingController nomeController = TextEditingController();
   TextEditingController cpfCnpjController = TextEditingController();
+  DateTime data = DateTime.now();
+  late int paymentStatus;
+  late ConfirmPaymentDTO confirm = ConfirmPaymentDTO();
+  
+
+  void initState() {
+    paymentStatus = widget.realizePayment.transactionId;
+  confirm.confirmPayment(1234, paymentStatus);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +52,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
               ReceiptScreenText.title,
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 30,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -47,64 +65,112 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
         iconTheme:
             const IconThemeData(color: ColorsProject.blueWhite, size: 40.0),
       ),
-      body: Column(
-        children: [
-          const Text(
-            ReceiptScreenText.dataHora,
-            style: TextStyle(
-              fontSize: 20.0,
-              color: ColorsProject.lowGrey,
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(top: 18.0),
-            child: Divider(thickness: 3, indent: 30.0, endIndent: 30.0),
-          ),
-          // conteudo central
-          Padding(
-            padding: const EdgeInsets.only(left: 35.0, right: 35.0),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.6,
-              // color: Colors.green,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  // valor
-                  TitleWidget(text: ReceiptScreenText.titulo1),
-                  ValueWidget(text: '${widget.valor.amount}',),
-                  // Quem vai receber
-                  TitleWidget(text: ReceiptScreenText.titulo2),
-                  SubTitleWidget(text: ReceiptScreenText.subtitulo2),
-                  ValueWidget(text: ReceiptScreenText.valor2),
-                  // Quem Pagou
-                  TitleWidget(text: ReceiptScreenText.titulo3),
-                  SubTitleWidget(text: ReceiptScreenText.nomeText),
-                  ValueWidget(text: ReceiptScreenText.nomeValue),
-                  SubTitleWidget(text: ReceiptScreenText.cpfText),
-                  ValueWidget(text: ReceiptScreenText.cpfValue),
-                  SubTitleWidget(text: ReceiptScreenText.agenciaText),
-                  ValueWidget(text: ReceiptScreenText.agenciaValue),
-                  SubTitleWidget(text: ReceiptScreenText.nsuText),
-                  ValueWidget(text: '${widget.valor.nsu}'),
-                  SubTitleWidget(text: ReceiptScreenText.codigoText),
-                  ValueWidget(text: ReceiptScreenText.codigoValue),
-                ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 35.0, right: 35.0),
+              child: SizedBox(
+                //height: MediaQuery.of(context).size.height * 0.7,
+                // color: Colors.green,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      // valor
+                      TitleWidget(text: ReceiptScreenText.titulo1),
+                      ValueWidget(
+                        text: CreditCardPreferencs.getAmountDouble()!
+                            .toString()
+                            .replaceAll('.', ','),
+                      ),
+                      TitleWidget(text: ReceiptScreenText.valorOriginal),
+                      ValueWidget(
+                        text: CreditCardPreferencs.getAmountOrigin()!
+                            .toString()
+                            .replaceAll('.', ','),
+                      ),
+                      TitleWidget(text: 'Parcelas'),
+                      Column(
+                        children: [
+                          if (CreditCardPreferencs.getInstallments() == 1) ...[
+                            ValueWidget(
+                              text: CreditCardPreferencs.getInstallments() ??
+                                  'A vista',
+                            ),
+                          ] else ...[
+                            ValueWidget(
+                              text:
+                                  '${CreditCardPreferencs.getInstallments()}x de ${CreditCardPreferencs.getParcel().toString().replaceAll('.', ',').substring(0, 5)}',
+                            )
+                          ]
+                        ],
+                      ),
+                      // Quem vai receber
+                      TitleWidget(text: ReceiptScreenText.titulo2),
+                      SubTitleWidget(text: ReceiptScreenText.subtitulo2),
+                      ValueWidget(text: NewPaymentPreferencs.getAssignor()),
+                      // Quem Pagou
+                      TitleWidget(text: ReceiptScreenText.titulo3),
+                      SubTitleWidget(text: ReceiptScreenText.nomeText),
+                      ValueWidget(text: CreditCardPreferencs.getCardHolder()),
+                      TitleWidget(text: 'Data de Pagamento'),
+                      ValueWidget(
+                        text: DateFormat('dd/MM/yyyy' ' - ' 'HH:mm', 'pt_BR')
+                            .format(data),
+                      ),
+
+                      TitleWidget(text: 'Vencimento'),
+                      ValueWidget(
+                        text: 'Não informado',
+                      ),
+                      SubTitleWidget(text: ReceiptScreenText.cpfText),
+                      ValueWidget(
+                          text: CreditCardPreferencs
+                              .getCardHolderDocumentUnformated()),
+                      TitleWidget(text: 'Autenticação bancária'),
+                      ValueWidget(
+                        text: 'fa98b263-4488-4f32',
+                      ),
+
+                      TitleWidget(text: 'Comprovante do Cartão'),
+                      ValueWidget(
+                        text: 'fa98b263-4488-4f32',
+                      ),
+
+                      SubTitleWidget(text: ReceiptScreenText.agenciaText),
+                      ValueWidget(text: ReceiptScreenText.agenciaValue),
+                      SubTitleWidget(text: ReceiptScreenText.nsuText),
+                      ValueWidget(text: '21212'),
+                      SubTitleWidget(text: ReceiptScreenText.codigoText),
+                      ValueWidget(text: CodeBarPreferencs.getCodeBarOriginal()),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+
   Widget _subtitle(String? text) {
-    return Text(
-      text!,
-      style: TextStyle(
-        fontSize: 28.0,
-        color: Colors.black,
-        fontWeight: FontWeight.bold,
-      ),
+    return Column(
+      children: [
+        Text(
+          text!,
+          style: TextStyle(
+            fontSize: 28.0,
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(
+          height: 8.0,
+        )
+      ],
     );
   }
 }
@@ -119,15 +185,21 @@ class TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text!,
-      style: const TextStyle(
-        fontSize: 30.0,
-        color: ColorsProject.lowGrey,
-      ),
+    return Column(
+      children: [
+        Text(
+          text!,
+          style: const TextStyle(
+            fontSize: 24.0,
+            color: ColorsProject.lowGrey,
+          ),
+        ),
+        SizedBox(
+          height: 2.0,
+        )
+      ],
     );
   }
-
 }
 
 class SubTitleWidget extends StatelessWidget {
@@ -140,12 +212,19 @@ class SubTitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text!,
-      style: const TextStyle(
-        fontSize: 20.0,
-        color: ColorsProject.lowGrey,
-      ),
+    return Column(
+      children: [
+        Text(
+          text!,
+          style: const TextStyle(
+            fontSize: 16.0,
+            color: ColorsProject.lowGrey,
+          ),
+        ),
+        SizedBox(
+          height: 2.0,
+        )
+      ],
     );
   }
 }
@@ -160,13 +239,20 @@ class ValueWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text!,
-      style: TextStyle(
-        fontSize: 28.0,
-        color: Colors.black,
-        fontWeight: FontWeight.bold,
-      ),
+    return Column(
+      children: [
+        Text(
+          text!,
+          style: TextStyle(
+            fontSize: 24.0,
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(
+          height: 16.0,
+        )
+      ],
     );
   }
 }

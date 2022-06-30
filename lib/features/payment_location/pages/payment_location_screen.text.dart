@@ -7,6 +7,7 @@ class PaymentLocationScreenText {
   static const String complemento = 'Complemento';
   static const String cidade = 'Cidade';
   static const String estado = 'Estado';
+  static const String continueButton = 'Continuar';
   static List<String> listOfStates = [];
 
   // https://servicodados.ibge.gov.br/api/v1/localidades/estados

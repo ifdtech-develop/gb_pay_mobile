@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:gb_pay_mobile/constants/routes.dart';
 import 'package:gb_pay_mobile/features/not_found/pages/not_found_screen.dart';
+import 'package:gb_pay_mobile/shared/code_bar/code_bar_preferences.dart';
+import 'package:gb_pay_mobile/shared/confirm_payment/confirm_payment_preferences.dart';
+import 'package:gb_pay_mobile/shared/credit_card/credit_card_data_preferences.dart';
+import 'package:gb_pay_mobile/shared/new_payment/new_payment_preferences.dart';
+import 'package:gb_pay_mobile/shared/payment_location/payment_location_preferences.dart';
+import 'package:gb_pay_mobile/shared/summary_preferences/summary_preferences.dart';
 import 'package:gb_pay_mobile/util/global_context.dart';
 import 'package:gb_pay_mobile/util/service_location.dart';
+import 'package:gb_pay_mobile/shared/user_data/signin_preferences.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   NavigationService().setupLocator();
-
+  await CreditCardPreferencs.init();
+  await UserPreferencs.init();
+  await PaymentLocationPreferencs.init();
+  await CodeBarPreferencs.init();
+  await NewPaymentPreferencs.init();
+  await ConfirmPaymentPreferencs.init();
+  await SummaryPreferencs.init();
   runApp(const GbPayApp());
 }
 
@@ -25,6 +39,11 @@ class _GbPayAppState extends State<GbPayApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      //supportedLocales: [const Locale('pt', 'BR')],
       debugShowCheckedModeBanner: false,
       initialRoute: AppRouteNames.greetings,
       navigatorKey: locator<NavigationService>().navigatorKey,

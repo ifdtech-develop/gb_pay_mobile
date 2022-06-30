@@ -7,18 +7,19 @@ class FormInputsPassword extends StatelessWidget {
   final TextEditingController controller;
   final String title;
   final String hintText;
-  final bool obscure;
+   bool obscure;
 
-  const FormInputsPassword({
+   FormInputsPassword({
     Key? key,
     required this.controller,
     required this.title,
     this.hintText = '',
-    this.obscure = false,
+    this.obscure = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    bool hiddenPass = false;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -40,6 +41,11 @@ class FormInputsPassword extends StatelessWidget {
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
             hintText: hintText,
+            suffixIcon: IconButton(
+              onPressed: (){
+              },
+              icon: Icon(Icons.visibility),
+            ),
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 20, horizontal: 4),
             enabledBorder: OutlineInputBorder(
@@ -51,6 +57,13 @@ class FormInputsPassword extends StatelessWidget {
         ),
       ],
     );
+  }
+  void togglePasswordView(){
+    if(obscure == true){
+      obscure = false;
+    }else{
+       obscure = true;
+    }
   }
   String? validatorPass(value) {
     if (value.isEmpty) {

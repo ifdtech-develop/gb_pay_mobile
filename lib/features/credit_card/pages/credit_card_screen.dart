@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:gb_pay_mobile/components/credit_card_components/form_inputs_date_card_components.dart';
+import 'package:gb_pay_mobile/components/credit_card_components/form_inputs_date_card_year_components.dart';
 import 'package:gb_pay_mobile/constants/routes.dart';
 import 'package:gb_pay_mobile/features/credit_card/pages/credit_card_screen.text.dart';
 import 'package:gb_pay_mobile/models/paymentCard/paymentCard_model.dart';
-import 'package:gb_pay_mobile/services/paymentCard_dto.dart';
+import 'package:gb_pay_mobile/services/payment_card_dto.dart';
 import 'package:gb_pay_mobile/use_cases/fees.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
 import 'package:gb_pay_mobile/util/screen.dart';
 import 'package:gb_pay_mobile/widgets/loader.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:gb_pay_mobile/shared/credit_card/credit_card_data_preferences.dart';
 
 import '../../../components/credit_card_components/form_inputs_components.dart';
 
@@ -30,15 +33,6 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
   TextEditingController nomeController = TextEditingController();
   TextEditingController cpfCnpjController = TextEditingController();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  int month = 0;
-  int year = 0;
-  int installment = 0;
-  var maskFormatterCard = MaskTextInputFormatter(
-      mask: '#### #### #### ####', type: MaskAutoCompletionType.lazy);
-  var maskFormatterCPF = MaskTextInputFormatter(
-      mask: '###.###.###-##', type: MaskAutoCompletionType.lazy);
-
-  //String dropdownValue = CreditCardScreenText.listOfParcels[0];
   final _formKey = GlobalKey<FormState>();
   PaymentCardDTO _paymentCard = PaymentCardDTO();
   PaymentCardModel _payment = PaymentCardModel();
@@ -47,20 +41,25 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
   late List<String> listOfParcels = [];
   bool isLoading = false;
   String _dropdownValue = '';
+  var maskFormatterCard = MaskTextInputFormatter(
+      mask: '#### #### #### ####', type: MaskAutoCompletionType.lazy);
+  var maskFormatterCPF = MaskTextInputFormatter(
+      mask: '###.###.###-##', type: MaskAutoCompletionType.lazy);
+  int month = 0;
+  int year = 0;
+  int installment = 0;
+  List<double> valueAmount = [];
 
   @override
   void initState() {
     super.initState();
-    SchedulerBinding.instance.addPostFrameCallback(
-      (_) {
-        _paymentCard = PaymentCardDTO();
-        isLoading = false;
-      },
-    );
+    _paymentCard = PaymentCardDTO();
+    isLoading = false;
     List<double> fees = CreditCardScreenText.listOfFees;
     List<double> result = [];
     fessCalculate(result, widget.valor, fees, listOfParcels);
     _dropdownValue = listOfParcels[0];
+    numeroParcelasController.text = _dropdownValue.substring(0, 1);
   }
 
   @override
@@ -71,6 +70,9 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    for (int i = 0; i < fees.length; i++) {
+      valueAmount.add(widget.valor + widget.valor * fees[i]);
+    }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -125,12 +127,17 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                           onChanged: (dynamic newValue) {
                             setState(() {
                               _dropdownValue = newValue;
-                              numeroParcelasController.text =
-                                  _dropdownValue.substring(0, 1);
-<<<<<<< Updated upstream
-=======
+                              if (int.parse(_dropdownValue.substring(0, 1)) <
+                                  10) {
+                                numeroParcelasController.text =
+                                    _dropdownValue.substring(0, 1);
+                              } else if (int.parse(
+                                      _dropdownValue.substring(0, 2)) >=
+                                  10) {
+                                numeroParcelasController.text =
+                                    _dropdownValue.substring(0, 2);
+                              }
                               print(numeroParcelasController.text);
->>>>>>> Stashed changes
                             });
                           },
                           items: listOfParcels
@@ -156,7 +163,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: FormInputs(
+                    child: FormInputsDateMonth(
                       numeroCartaoController: validadeMonthController,
                       title: 'Mês',
                       icon: Icons.calendar_month_outlined,
@@ -168,7 +175,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(left: 20.0),
-                      child: FormInputs(
+                      child: FormInputsDateYear(
                         numeroCartaoController: validadeYearController,
                         title: 'Ano',
                         icon: Icons.calendar_month_outlined,
@@ -213,6 +220,9 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                 width: MediaQuery.of(context).size.width,
                 height: 60.0,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: ColorsProject.blueWhite,
+                  ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate() || isLoading) {
                       var brandType = '';
@@ -225,6 +235,10 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                       month = int.parse(validadeMonthController.text);
                       year = int.parse(validadeYearController.text);
                       installment = int.parse(numeroParcelasController.text);
+                      print(installment);
+
+                      var parcel = valueAmount[installment-1];
+                      parcel = parcel/installment-1;
 
                       var newCardEdit = numeroCartaoController.text;
                       newCardEdit = newCardEdit.replaceAll(' ', '');
@@ -238,6 +252,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                       });
                       var jsonCode = {};
                       if (installment > 1) {
+                        CreditCardPreferencs.setInstallments(installment);
                         jsonCode = {
                           'card': {
                             'cardNumber': newCardEdit,
@@ -246,11 +261,11 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                             'expirationMonth': month,
                             'expirationYear': year,
                             'securityCode': cvvController.text,
-                            'brand': 'visa',
+                            'brand': brandType,
                           },
                           'payment': {
-                            'documentNumber': cpfCnpjController.text,
-                            'amount': result[installment - 1].toInt(),
+                            'documentNumber': cpf,
+                            'amount': valueAmount[installment - 1].toInt(),
                             'installments': installment,
                           },
                           'customer': {
@@ -262,17 +277,17 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                       } else if (installment == 1) {
                         jsonCode = {
                           'card': {
-                            'cardNumber': numeroCartaoController.text,
+                            'cardNumber': newCardEdit,
                             'cardHolder': nomeController.text,
-                            'cardHolderDocument': cpfCnpjController.text,
+                            'cardHolderDocument': cpf,
                             'expirationMonth': month,
                             'expirationYear': year,
                             'securityCode': cvvController.text,
-                            'brand': 'visa',
+                            'brand': brandType,
                           },
                           'payment': {
-                            'documentNumber': cpfCnpjController.text,
-                            'amount': result[installment - 1].toInt(),
+                            'documentNumber': cpf,
+                            'amount': valueAmount[installment - 1].toInt(),
                           },
                           'customer': {
                             'firstName': nomeController.text,
@@ -281,20 +296,25 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                           }
                         };
                       }
-                      _paymentCard.payment(jsonCode).then((value) {
-                        widget.navigator
-                            .pushNamed(AppRouteNames.receipt, arguments: value);
-                      }).catchError((error) {
-                        print(error);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            elevation: 0,
-                            backgroundColor: Colors.transparent,
-                            content: Text('data'),
-                            duration: Duration(seconds: 3),
-                          ),
-                        );
-                      });
+                      CreditCardPreferencs.setCardNumber(newCardEdit);
+                      CreditCardPreferencs.setCardHolder(nomeController.text);
+                      CreditCardPreferencs.setCardHolderDocument(cpf);
+                      CreditCardPreferencs.setExpirationMonth(month);
+                      CreditCardPreferencs.setExpirationYear(year);
+                      CreditCardPreferencs.setSecurityCode(cvvController.text);
+                      CreditCardPreferencs.setBrand(brandType);
+                      CreditCardPreferencs.setAmount(
+                          valueAmount[installment - 1].toInt());
+                          CreditCardPreferencs.setParcel(parcel);
+                          CreditCardPreferencs.setAmountDouble(valueAmount[installment - 1].toStringAsFixed(2));
+                          CreditCardPreferencs.setAmountOrigin(widget.valor.toStringAsFixed(2));
+                      CreditCardPreferencs.setDocumentNumber('76600763000135');
+                      CreditCardPreferencs.setCardHolderDocumentUnformated(cpfCnpjController.text);
+                      CreditCardPreferencs.setInstallments(installment.toInt());
+                      widget.navigator.pushNamed(AppRouteNames.paymentLocation);
+
+                      // _paymentCard.payment(jsonCode).then((value) {
+                      // });
                     }
                     await Future.delayed(Duration(seconds: 3));
                     if (isLoading = mounted) {

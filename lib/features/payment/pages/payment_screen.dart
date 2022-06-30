@@ -154,7 +154,7 @@ class _PaymentPageState extends State<PaymentPage> {
       ),
       child: SizedBox(
         height: 60.0,
-        width: MediaQuery.of(context).size.width * 0.7,
+        width: MediaQuery.of(context).size.width * 0.8,
         child: ElevatedButton(
           onPressed: () {
             scanCodeBar();
@@ -182,7 +182,7 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget _buttonEnterCodeBar(BuildContext context) {
     return SizedBox(
       height: 60.0,
-      width: MediaQuery.of(context).size.width * 0.7,
+      width: MediaQuery.of(context).size.width * 0.8,
       child: ElevatedButton(
         onPressed: () {
           Navigator.pushNamed(context, AppRouteNames.codeBarPage);

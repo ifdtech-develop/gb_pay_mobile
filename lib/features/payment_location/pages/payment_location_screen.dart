@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gb_pay_mobile/constants/routes.dart';
 import 'package:gb_pay_mobile/features/payment_location/pages/payment_location_screen.text.dart';
+import 'package:gb_pay_mobile/models/cep_result_model.dart';
 import 'package:gb_pay_mobile/models/paymentCard/paymentCard_model.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
 import 'package:gb_pay_mobile/util/screen.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:search_cep/search_cep.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../components/payment_location_components/form_inptus_add_info.dart';
+import '../../../components/payment_location_components/form_inputs_cep.dart';
+import '../../../components/payment_location_components/form_inputs_city.dart';
+import '../../../components/payment_location_components/form_inputs_data_uf.dart';
+import '../../../services/cep_generator.dart';
+import '../../../shared/payment_location/payment_location_preferences.dart';
+import '../../../use_cases/cep_generator.dart';
 
 class PaymentLocationScreen extends StatefulWidget with Screen {
-  PaymentLocationScreen({Key? key,}) : super(key: key);
+  PaymentLocationScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<PaymentLocationScreen> createState() => _PaymentLocationScreenState();
@@ -22,9 +34,14 @@ class _PaymentLocationScreenState extends State<PaymentLocationScreen> {
   TextEditingController complementoController = TextEditingController();
   TextEditingController cidadeController = TextEditingController();
   TextEditingController estadoController = TextEditingController();
-  ViaCepInfo infoCep = ViaCepInfo();
+  final _formKey = GlobalKey<FormState>();
+  ResultCep resultadoCep = ResultCep();
+  String valorCep = '';
 
   late String dropdownValue;
+
+  var maskFormatterCEP = MaskTextInputFormatter(
+      mask: '#####-###', type: MaskAutoCompletionType.lazy);
 
   @override
   void initState() {
@@ -33,14 +50,21 @@ class _PaymentLocationScreenState extends State<PaymentLocationScreen> {
     dropdownValue = dropdownValue = PaymentLocationScreenText.listOfStates[0];
   }
 
-  void pesquisaCep(String cep) async{
-    final infoCep = ViaCepSearchCep();
-    final infoCepJSON = await infoCep.searchInfoByCep(cep: cep);
-    print(infoCepJSON);
-}
-
   @override
   Widget build(BuildContext context) {
+    Future<void> pesquisaCep(String cep) async {
+      final infoCep = await ViaCepService.fetchCep(cep: cep);
+      if (infoCep.bairro == null) {
+        bairroController.text = '';
+        cidadeController.text = '';
+        enderecoController.text = '';
+      } else {
+        bairroController.text = infoCep.bairro.toString();
+        cidadeController.text = infoCep.localidade.toString();
+        enderecoController.text = infoCep.logradouro.toString();
+      }
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -48,7 +72,7 @@ class _PaymentLocationScreenState extends State<PaymentLocationScreen> {
           PaymentLocationScreenText.title,
           style: TextStyle(
             color: Colors.black,
-            fontSize: 30,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -59,195 +83,138 @@ class _PaymentLocationScreenState extends State<PaymentLocationScreen> {
         iconTheme:
             const IconThemeData(color: ColorsProject.blueWhite, size: 40.0),
       ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    PaymentLocationScreenText.estado,
-                    style: TextStyle(
-                      fontSize: 25.0,
-                    ),
-                  ),
-                  InputDecorator(
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(5.0),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: ColorsProject.strongGrey,
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
+          child: SingleChildScrollView(
+            child: ValueListenableBuilder(
+              valueListenable: cepController,
+              builder: (context, TextEditingValue value, __) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          PaymentLocationScreenText.estado,
+                          style: TextStyle(
+                            fontSize: 25.0,
+                          ),
                         ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: ColorsProject.strongGrey,
+                        InputDecorator(
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.all(5.0),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: ColorsProject.strongGrey,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: ColorsProject.strongGrey,
+                              ),
+                            ),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: dropdownValue,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  dropdownValue = newValue!;
+                                });
+                              },
+                              items: PaymentLocationScreenText.listOfStates
+                                  .map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+                          ),
                         ),
-                      ),
+                        SizedBox(
+                          height: 12.0,
+                        ),
+                      ],
                     ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: dropdownValue,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropdownValue = newValue!;
-                          });
+                    FormInputsCEP(
+                        Controller: cepController,
+                        title: PaymentLocationScreenText.cep,
+                        mask: maskFormatterCEP,
+                        func: pesquisaCep),
+                    FormInputsUF(
+                      numeroCartaoController: bairroController,
+                      title: PaymentLocationScreenText.bairro,
+                    ),
+                    FormInputsUF(
+                      numeroCartaoController: enderecoController,
+                      title: PaymentLocationScreenText.endereco,
+                    ),
+                    FormInputsUF(
+                      numeroCartaoController: numeroController,
+                      title: PaymentLocationScreenText.numero,
+                    ),
+                    FormInputsAdd(
+                      numeroCartaoController: complementoController,
+                      title: PaymentLocationScreenText.complemento,
+                    ),
+                    FormInputsCity(
+                      numeroCartaoController: cidadeController,
+                      title: PaymentLocationScreenText.cidade,
+                    ),
+                    SizedBox(
+                      height: 12.0,
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 60.0,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            PaymentLocationPreferencs.setBairro(
+                                bairroController.text);
+                            PaymentLocationPreferencs.setCep(
+                                cepController.text);
+                            PaymentLocationPreferencs.setCidade(
+                                cidadeController.text);
+                            PaymentLocationPreferencs.setComplemento(
+                                complementoController.text);
+                            PaymentLocationPreferencs.setEndereco(
+                                enderecoController.text);
+                            PaymentLocationPreferencs.setNumero(
+                                numeroController.text);
+                            PaymentLocationPreferencs.setUf(dropdownValue);
+                            widget.navigator
+                                .pushNamed(AppRouteNames.paymentSummary);
+                          }
                         },
-                        items: PaymentLocationScreenText.listOfStates
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6.0),
+                          ),
+                          primary: ColorsProject.blueWhite,
+                          elevation: 0,
+                        ),
+                        child: const Text(
+                          PaymentLocationScreenText.continueButton,
+                          style: TextStyle(fontSize: 28.0),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 12.0,),
-                ],
-              ),
-              FormInputsCEP(
-                numeroCartaoController: bairroController,
-                title: PaymentLocationScreenText.cep,
-              ),
-              FormInputs(
-                numeroCartaoController: enderecoController,
-                title: PaymentLocationScreenText.endereco,
-              ),
-              FormInputs(
-                numeroCartaoController: numeroController,
-                title: PaymentLocationScreenText.numero,
-              ),
-              FormInputs(
-                numeroCartaoController: complementoController,
-                title: PaymentLocationScreenText.complemento,
-              ),
-              FormInputs(
-                numeroCartaoController: cidadeController,
-                title: PaymentLocationScreenText.cidade,
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 60.0,
-                child: ElevatedButton(
-                  onPressed: () {
-                    widget.navigator.pushNamed(AppRouteNames.receipt, arguments: PaymentCardModel());
-                  },
-                  child: const Text(
-                    'Pagar',
-                    style: TextStyle(fontSize: 28.0),
-                  ),
-                ),
-              )
-            ],
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
-    );
-  }}
-
-
-class FormInputsCEP extends StatelessWidget {
-  void pesquisaCep(String cep) async{
-    final viaCepSearchCep = ViaCepSearchCep();
-    final infoCepJSON = await viaCepSearchCep.searchInfoByCep(cep: cep);
-    print(infoCepJSON);
-}
-  final TextEditingController numeroCartaoController;
-  final String title;
-
-  const FormInputsCEP({
-    Key? key,
-    required this.numeroCartaoController,
-    required this.title,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'CEP',
-          style: const TextStyle(
-            fontSize: 25.0,
-          ),
-        ),
-        TextFormField(
-          onChanged: ((value) => pesquisaCep(numeroCartaoController.text)),
-          controller: numeroCartaoController,
-          decoration: const InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorsProject.strongGrey,
-              ),
-            ),
-            // Border quando usuario clica no input
-            border: OutlineInputBorder(),
-          ),
-        ),
-        SizedBox(height: 12.0,),
-        Text(
-          'Bairro',
-          style: const TextStyle(
-            fontSize: 25.0,
-          ),
-        ),
-        TextFormField(
-          controller: numeroCartaoController,
-          decoration: const InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorsProject.strongGrey,
-              ),
-            ),
-            // Border quando usuario clica no input
-            border: OutlineInputBorder(),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class FormInputs extends StatelessWidget {
-  final TextEditingController numeroCartaoController;
-  final String title;
-
-  const FormInputs({
-    Key? key,
-    required this.numeroCartaoController,
-    required this.title,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 25.0,
-          ),
-        ),
-        TextFormField(
-          controller: numeroCartaoController,
-          decoration: const InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorsProject.strongGrey,
-              ),
-            ),
-            // Border quando usuario clica no input
-            border: OutlineInputBorder(),
-          ),
-        ),
-        SizedBox(height: 12.0,),
-      ],
     );
   }
 }

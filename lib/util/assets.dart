@@ -8,4 +8,5 @@ class AppAssets {
   static const String barCodeSmallIcon = '$imagesFolder/barra_small.png';
   static const String cardIcon = '$imagesFolder/cartao.png';
   static const String arrowIcon = '$imagesFolder/arrow_next.png';
+  static const String logoIconColor = '$imagesFolder/gbiconcolor.png';
 }

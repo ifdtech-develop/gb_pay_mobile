@@ -1,7 +1,8 @@
 class ReceiptScreenText {
   static const String title = 'Comprovante de Pagamento';
   static const String dataHora = '21 fevereiro 2022 às 15h';
-  static const String titulo1 = 'Valor';
+  static const String titulo1 = 'Valor Pago';
+  static const String valorOriginal = 'Valor Original';
   static const String valor = 'R\$ 21,00';
   static const String titulo2 = 'Quem vai receber';
   static const String subtitulo2 = 'Nome de Empresa';
