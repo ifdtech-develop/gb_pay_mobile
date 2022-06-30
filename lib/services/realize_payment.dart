@@ -47,26 +47,26 @@ class RealizePaymentQuery {
           "convenant": "string",
           "externalNSU": 1234,
           "externalTerminal": '02212451202',
-          "cpfcnpj": '02212451202',
+          "cpfcnpj": "10480314000192",
           "billData": {
-            "value": 195.39,
-            "originalValue": 195.39,
+            "value": 10,
+            "originalValue": 10,
             "valueWithDiscount": 0,
-            "valueWithAdditional": 0
+            "valueWithAdditional": valueWithAdditional
           },
           "infoBearer": {
-            "nameBearer": 'Fulano de tal',
-            "documentBearer": '02212451202',
+            "nameBearer": nome,
+            "documentBearer": cpf,
             "methodPaymentCode": 2
           },
           "barCode": {
-            "type": 1,
-            "digitable": "836700000018953900470006000000023663057006220081",
-            "barCode": "836700000018953900470006000000023663057006220081"
+            "type": typeBarCode,
+            "digitable": digitable,
+            "barCode": barCode
           },
-          "dueDate": "2022-06-16T00:00:00Z",
-          "transactionIdAuthorize": 7083533,
-          "userType": 2,
+          "dueDate": "2022-06-30T00:00:00Z",
+          "transactionIdAuthorize": 816311348,
+          "userType": 1,
           "corban": ""
       }),
     );
