@@ -20,7 +20,7 @@ class FormInputsSignup extends StatelessWidget {
     this.hintText = '',
     this.obscure = false,
     this.mask = const [],
-    this.length = 60,
+    this.length = 80,
   }) : super(key: key);
 
   @override

@@ -35,6 +35,7 @@ class FormInputsCEP extends StatelessWidget {
           maxLength: 9,
           validator: cepValidator,
           inputFormatters: [mask],
+          keyboardType: TextInputType.number,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           onEditingComplete: () {
             if (Controller.text == '' || Controller.text.length < 9) {

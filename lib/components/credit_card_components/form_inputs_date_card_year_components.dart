@@ -26,38 +26,40 @@ class FormInputsDateYear extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 25.0,
-          ),
-        ),
-        TextFormField(
-          keyboardType: type,
-          inputFormatters: mask,
-          maxLength: length,
-          controller: numeroCartaoController,
-          validator:
-              RequiredValidator(errorText: 'Por favor, insira o $validator'),
-          decoration: InputDecoration(
-            counterText: '',
-            prefixIcon: Icon(
-              icon,
-              color: ColorsProject.blueWhite,
+    return SizedBox(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 25.0,
             ),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorsProject.strongGrey,
+          ),
+          TextFormField(
+            keyboardType: type,
+            inputFormatters: mask,
+            maxLength: length,
+            controller: numeroCartaoController,
+            validator:
+                RequiredValidator(errorText: 'Por favor, insira o $validator'),
+            decoration: InputDecoration(
+              counterText: '',
+              prefixIcon: Icon(
+                icon,
+                color: ColorsProject.blueWhite,
               ),
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: ColorsProject.strongGrey,
+                ),
+              ),
+              // Border quando usuario clica no input
+              border: const OutlineInputBorder(),
             ),
-            // Border quando usuario clica no input
-            border: const OutlineInputBorder(),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
