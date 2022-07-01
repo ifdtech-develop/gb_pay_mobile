@@ -306,8 +306,8 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                       CreditCardPreferencs.setAmount(
                           valueAmount[installment - 1].toInt());
                           CreditCardPreferencs.setParcel(parcel);
-                          CreditCardPreferencs.setAmountDouble(valueAmount[installment - 1].toStringAsFixed(2));
-                          CreditCardPreferencs.setAmountOrigin(widget.valor.toStringAsFixed(2));
+                          CreditCardPreferencs.setAmountDouble(valueAmount[installment - 1]);
+                          CreditCardPreferencs.setAmountOrigin(widget.valor);
                       CreditCardPreferencs.setDocumentNumber('76600763000135');
                       CreditCardPreferencs.setCardHolderDocumentUnformated(cpfCnpjController.text);
                       CreditCardPreferencs.setInstallments(installment.toInt());

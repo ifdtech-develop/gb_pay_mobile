@@ -96,7 +96,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
                         children: [
                           if (CreditCardPreferencs.getInstallments() == 1) ...[
                             ValueWidget(
-                              text: CreditCardPreferencs.getInstallments() ??
+                              text: '${CreditCardPreferencs.getInstallments()}' ??
                                   'A vista',
                             ),
                           ] else ...[

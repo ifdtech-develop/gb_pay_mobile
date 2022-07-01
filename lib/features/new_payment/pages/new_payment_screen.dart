@@ -22,13 +22,16 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
   late String code = '';
   String dateCalendar = '';
   TextEditingController dateController = TextEditingController();
+  String dataVencimento = '';
   DateTime data = DateTime.now();
+ 
 
   @override
   void initState() {
     super.initState();
     dateController.addListener(() {
       dateCalendar = DateTime.now().toString();
+       
       //code = arguments['/codeBarPage'];
     });
   }
@@ -41,6 +44,10 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
 
   @override
   Widget build(BuildContext context) {
+    dataVencimento = widget.ticketInfo.dueDate!;
+    // DateTime parse(dataVencimento);
+
+       dataVencimento = dataVencimento.replaceAll('T00:00:00Z', '');
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -138,7 +145,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
       children: [
         infoPage('Data de pagamento', DateFormat("dd/MM/yyyy").format(data)),
         infoPage('Beneficiário', widget.ticketInfo.assignor),
-        infoPage('Vencimento', widget.ticketInfo.dueDate ?? 'Sem Vencimento'),
+        infoPage('Vencimento', dataVencimento ?? 'Sem Vencimento'),
         infoPage('Forma de pagamento', 'Cartão de crédito'),
       ],
     );
@@ -200,6 +207,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
             print(widget.ticketInfo.value);
             NewPaymentPreferencs.setAssignor(widget.ticketInfo.assignor);
             NewPaymentPreferencs.setTransactionId(widget.ticketInfo.transactionId);
+            NewPaymentPreferencs.setDueDate(widget.ticketInfo.dueDate);
             Navigator.pushNamed(context, AppRouteNames.creditcard, arguments: widget.ticketInfo.value);
           },
           style: ElevatedButton.styleFrom(

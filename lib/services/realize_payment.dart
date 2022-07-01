@@ -45,28 +45,43 @@ class RealizePaymentQuery {
       },
       body: jsonEncode({
           "convenant": "string",
+<<<<<<< HEAD
+          "externalNSU":nsu,
+          "externalTerminal": cpf,
+          "cpfcnpj": cpf,
+          "billData": {
+            "value": valueFee,
+            "originalValue": originalValue,
+            "valueWithDiscount": 0,
+            "valueWithAdditional": 0,
+=======
           "externalNSU": 1234,
           "externalTerminal": '02212451202',
-          "cpfcnpj": "10480314000192",
+          "cpfcnpj": '02212451202',
           "billData": {
-            "value": 10,
-            "originalValue": 10,
+            "value": 195.39,
+            "originalValue": 195.39,
             "valueWithDiscount": 0,
-            "valueWithAdditional": valueWithAdditional
+            "valueWithAdditional": 0
+>>>>>>> parent of 779375a (Alterações API)
           },
           "infoBearer": {
-            "nameBearer": nome,
-            "documentBearer": cpf,
+            "nameBearer": 'Fulano de tal',
+            "documentBearer": '02212451202',
             "methodPaymentCode": 2
           },
           "barCode": {
-            "type": typeBarCode,
-            "digitable": digitable,
-            "barCode": barCode
+            "type": 1,
+            "digitable": "836700000018953900470006000000023663057006220081",
+            "barCode": "836700000018953900470006000000023663057006220081"
           },
-          "dueDate": "2022-06-30T00:00:00Z",
-          "transactionIdAuthorize": 816311348,
-          "userType": 1,
+          "dueDate": "2022-06-16T00:00:00Z",
+<<<<<<< HEAD
+          "transactionIdAuthorize": transactionIdAuthorize,
+=======
+          "transactionIdAuthorize": 7083533,
+>>>>>>> parent of 779375a (Alterações API)
+          "userType": 2,
           "corban": ""
       }),
     );
