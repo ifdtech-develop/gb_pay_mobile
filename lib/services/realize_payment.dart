@@ -45,7 +45,6 @@ class RealizePaymentQuery {
       },
       body: jsonEncode({
           "convenant": "string",
-<<<<<<< HEAD
           "externalNSU":nsu,
           "externalTerminal": cpf,
           "cpfcnpj": cpf,
@@ -54,33 +53,19 @@ class RealizePaymentQuery {
             "originalValue": originalValue,
             "valueWithDiscount": 0,
             "valueWithAdditional": 0,
-=======
-          "externalNSU": 1234,
-          "externalTerminal": '02212451202',
-          "cpfcnpj": '02212451202',
-          "billData": {
-            "value": 195.39,
-            "originalValue": 195.39,
-            "valueWithDiscount": 0,
-            "valueWithAdditional": 0
->>>>>>> parent of 779375a (Alterações API)
           },
           "infoBearer": {
-            "nameBearer": 'Fulano de tal',
-            "documentBearer": '02212451202',
+            "nameBearer": nome,
+            "documentBearer": cpf,
             "methodPaymentCode": 2
           },
           "barCode": {
-            "type": 1,
-            "digitable": "836700000018953900470006000000023663057006220081",
-            "barCode": "836700000018953900470006000000023663057006220081"
+            "type": typeBarCode,
+            "digitable": digitable,
+            "barCode": barCode
           },
           "dueDate": "2022-06-16T00:00:00Z",
-<<<<<<< HEAD
           "transactionIdAuthorize": transactionIdAuthorize,
-=======
-          "transactionIdAuthorize": 7083533,
->>>>>>> parent of 779375a (Alterações API)
           "userType": 2,
           "corban": ""
       }),
