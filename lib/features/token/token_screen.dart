@@ -95,7 +95,7 @@ class _TokenScreenState extends State<TokenPage> with TickerProviderStateMixin {
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.9,
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: Colors.white,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(
                       60,
@@ -137,7 +137,7 @@ class _TokenScreenState extends State<TokenPage> with TickerProviderStateMixin {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              FutureBuilder(
+                              FutureBuilder<String>(
                                   future: metodo(imei),
 
                                   // valueListenable: _code,

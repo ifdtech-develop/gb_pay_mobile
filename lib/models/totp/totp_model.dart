@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:ootp/ootp.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 
 import '../../features/token/token_screen.dart';
 
@@ -105,7 +106,7 @@ class TotpRest {
 }
 
 Future<String> metodo(ImeiController imei) async {
-  //deviceId = await PlatformDeviceId.getDeviceId;
+  deviceId = await PlatformDeviceId.getDeviceId;
 
   final secret = base32.encodeString(deviceId as String);
   print('deviceid: $deviceId');
