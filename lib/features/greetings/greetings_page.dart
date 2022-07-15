@@ -94,32 +94,32 @@ class _GreetingsPageState extends State<GreetingsPage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    // SizedBox(
-                    //   width: 340.0,
-                    //   height: 48,
-                    //   child: OutlinedButton(
-                    //     style: OutlinedButton.styleFrom(
-                    //       side: const BorderSide(
-                    //         color: Colors.white,
-                    //         width: 2,
-                    //         style: BorderStyle.solid,
-                    //       ),
-                    //       shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(100),
-                    //       ),
-                    //     ),
-                    //     onPressed: () {
-                    //       widget.navigator.pushNamed(AppRouteNames.token);
-                    //     },
-                    //     child: const Text(
-                    //       GreetingsScreenText.token,
-                    //       style: TextStyle(
-                    //         fontSize: 16,
-                    //         color: Colors.white,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
+                    SizedBox(
+                      width: 340.0,
+                      height: 48,
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(
+                            color: Colors.black,
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                        ),
+                        onPressed: () {
+                          widget.navigator.pushNamed(AppRouteNames.token);
+                        },
+                        child: const Text(
+                          GreetingsScreenText.token,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

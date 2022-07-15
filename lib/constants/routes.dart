@@ -12,11 +12,11 @@ import 'package:gb_pay_mobile/features/receipt/pages/receipt_screen.dart';
 import 'package:gb_pay_mobile/features/signin/signin_page.dart';
 import 'package:gb_pay_mobile/features/signup/signup_page.dart';
 import 'package:gb_pay_mobile/features/statement/pages/statement_screen.dart';
-import 'package:gb_pay_mobile/features/token/token_page.dart';
 import 'package:gb_pay_mobile/models/paymentCard/paymentCard_model.dart';
 import 'package:gb_pay_mobile/models/signup/signup_model.dart';
 import 'package:gb_pay_mobile/models/ticket_query/ticket_query.dart';
 
+import '../features/token/token_screen.dart';
 import '../models/confirm_payment/confirm_payment_model.dart';
 import '../models/confirm_payment_system/confirm_payment_system.dart';
 
@@ -46,7 +46,7 @@ class AppRoutes {
     AppRouteNames.signin: (_) => SigninPage(),
     AppRouteNames.signup: (_) => const SignupPage(),
     AppRouteNames.greetings: (_) => GreetingsPage(),
-    AppRouteNames.token: (_) => const TokenPage(),
+    AppRouteNames.token: (_) => TokenPage(),
     AppRouteNames.paymentpage: (args) => PaymentPage(
           user: args as String,
         ),
@@ -55,17 +55,15 @@ class AppRoutes {
           ticketInfo: args as TicketQuery,
         ),
     AppRouteNames.creditcard: (args) => CreditCardScreen(
-      valor: args as double,
-    ),
-    AppRouteNames.paymentLocation: (args) => PaymentLocationScreen(
-    ),
+          valor: args as double,
+        ),
+    AppRouteNames.paymentLocation: (args) => PaymentLocationScreen(),
     AppRouteNames.receipt: (args) => ReceiptScreen(
-      realizePayment: args as ConfirmPaymentModel,
-    ),
+          realizePayment: args as ConfirmPaymentModel,
+        ),
     AppRouteNames.statement: (_) => const StatementPage(),
     AppRouteNames.paymentSummary: (_) => const PaymentSummaryPage(),
     AppRouteNames.perfilUser: (_) => const PerfilUserPage(),
-    AppRouteNames.loadingPayment: (_) => PaymentLoadingPage(
-    ),
+    AppRouteNames.loadingPayment: (_) => PaymentLoadingPage(),
   };
 }
