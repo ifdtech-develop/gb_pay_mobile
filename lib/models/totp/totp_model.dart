@@ -11,8 +11,9 @@ import 'package:ootp/ootp.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 
 import '../../features/token/token_screen.dart';
+import '../../shared/user_data/signin_preferences.dart';
 
-String? deviceId;
+String? userId;
 String? mac;
 String? imeiNo;
 //MacadressGen macadressGen = MacadressGen();
@@ -45,7 +46,7 @@ class TotpRest {
     //}
 
     //print("URL: ${kTotpURL}");
-    print(deviceId);
+    print(userId);
     print(tell);
     print(name);
     print(mac);
@@ -69,7 +70,7 @@ class TotpRest {
 
 // await getTotp();
 
-  String? id = deviceId;
+  String? id = userId;
   Future<String> fetchTotpDTO(String email) async {
     //print('fetch para tell: ' + tell);
     // Se nao houver conexao rede o comando abaixo vai gerar uma excessao. Essa excessao deve subir
@@ -106,10 +107,10 @@ class TotpRest {
 }
 
 Future<String> metodo(ImeiController imei) async {
-  deviceId = await PlatformDeviceId.getDeviceId;
+  userId = await UserPreferencs.getId();
 
-  final secret = base32.encodeString(deviceId as String);
-  print('deviceid: $deviceId');
+  final secret = base32.encodeString(userId as String);
+  print('userId: $userId');
 
   final convert = secret.replaceAll("=", "");
   final decoded = base32.decode(convert);
