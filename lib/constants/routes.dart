@@ -10,6 +10,7 @@ import 'package:gb_pay_mobile/features/payment_location/pages/payment_location_s
 import 'package:gb_pay_mobile/features/payment_summary/payment_summary_page.dart';
 import 'package:gb_pay_mobile/features/perfil_user/perfil_user_page.dart';
 import 'package:gb_pay_mobile/features/receipt/pages/receipt_screen.dart';
+import 'package:gb_pay_mobile/features/rescue_pass/pages/rescue_pass.dart';
 import 'package:gb_pay_mobile/features/signin/signin_page.dart';
 import 'package:gb_pay_mobile/features/signup/signup_page.dart';
 import 'package:gb_pay_mobile/features/statement/pages/statement_screen.dart';
@@ -41,6 +42,7 @@ class AppRouteNames {
   static const String perfilUser = '/perfilUser';
   static const String loadingPayment = '/loadingPayment';
   static const String failurePayment = '/failurePayment';
+  static const String rescuePassword = '/rescuePassword';
 }
 
 class AppRoutes {
@@ -68,5 +70,6 @@ class AppRoutes {
     AppRouteNames.perfilUser: (_) => const PerfilUserPage(),
     AppRouteNames.loadingPayment: (_) => PaymentLoadingPage(),
     AppRouteNames.failurePayment: (_) => FaitlurePage(),
+    AppRouteNames.rescuePassword: (_) => RescuePage(),
   };
 }

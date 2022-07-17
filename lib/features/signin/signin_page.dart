@@ -96,42 +96,56 @@ class _SigninPageState extends State<SigninPage> {
                     const SizedBox(
                       height: 32.0,
                     ),
-                     Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Senha',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.black,
-                ),
-              )),
-          const SizedBox(
-            height: 10.0,
-          ),
-          TextFormField(
-            controller: passwordController,
-            validator: validatorPass,
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-              suffixIcon: IconButton(
-                onPressed: (){
-                  setState(() {
-                    obscure = !obscure;
-                  });
-                },
-                icon: Icon(Icons.visibility),
-              ),
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 2, color: Colors.grey),
-                borderRadius: BorderRadius.circular(6),
-              ),
-            ),
-             obscureText: obscure,
-          ),
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Senha',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.black,
+                          ),
+                        )),
                     const SizedBox(
-                      height: 40.0,
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      controller: passwordController,
+                      validator: validatorPass,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obscure = !obscure;
+                            });
+                          },
+                          icon: Icon(Icons.visibility),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 8),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(width: 2, color: Colors.grey),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                      obscureText: obscure,
+                    ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, AppRouteNames.rescuePassword);
+                        },
+                        child: Text(
+                          'Recuperar Senha',
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8.0,
                     ),
                     SizedBox(
                       width: 330.0,
@@ -146,8 +160,8 @@ class _SigninPageState extends State<SigninPage> {
                               isLoading = true;
                             });
                             _signinDTO
-                                .signin(
-                                    emailController.text, passwordController.text)
+                                .signin(emailController.text,
+                                    passwordController.text)
                                 .then((value) {
                               UserPreferencs.setToken(value.accessToken);
                               UserPreferencs.setUserName(value.name);
@@ -158,8 +172,8 @@ class _SigninPageState extends State<SigninPage> {
                               );
                             }).catchError((error) {
                               setState(() {
-                              isLoading = false;
-                            });
+                                isLoading = false;
+                              });
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   elevation: 0,
@@ -180,12 +194,12 @@ class _SigninPageState extends State<SigninPage> {
                           }
                         },
                         child: Text(
-                                SigninPageText.continuePage,
-                                style: TextStyle(
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                          SigninPageText.continuePage,
+                          style: TextStyle(
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -212,14 +226,13 @@ class _SigninPageState extends State<SigninPage> {
     }
   }
 
-  void togglePasswordView(){
-    if(obscure == true){
+  void togglePasswordView() {
+    if (obscure == true) {
       obscure = false;
-    }else{
-       obscure = true;
+    } else {
+      obscure = true;
     }
   }
-  
 
   _setToken(token, name, id) async {
     final SharedPreferences prefs = await _prefs;

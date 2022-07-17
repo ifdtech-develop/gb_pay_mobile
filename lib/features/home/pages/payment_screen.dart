@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:gb_pay_mobile/constants/routes.dart';
-import 'package:gb_pay_mobile/features/payment/pages/payment_screen.text.dart';
+import 'package:gb_pay_mobile/features/home/pages/payment_screen.text.dart';
 import 'package:gb_pay_mobile/services/ticket_query_dto.dart';
 import 'package:gb_pay_mobile/util/assets.dart';
 import 'package:gb_pay_mobile/util/colors.dart';
 import 'package:gb_pay_mobile/util/screen.dart';
-
-import '../../../models/signup/signup_model.dart';
+import '../../../shared/user_data/signin_preferences.dart';
 import '../../../widgets/drawer.dart';
 
 class PaymentPage extends StatefulWidget with Screen {
@@ -59,6 +58,7 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     firstName = widget.user.split(" ")[0].toString();
+    firstName = '${firstName[0].toUpperCase()}' + '${firstName.substring(1)}';
     return Scaffold(
       endDrawer: const DrawerGBPay(),
       appBar: AppBar(
@@ -106,10 +106,10 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   Widget get _dataCode {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Text(
-        PaymentScreenText.code,
+        "Seu ID: " + UserPreferencs.getId().toString(),
         style: TextStyle(
           color: Colors.black,
           fontSize: 25.0,
