@@ -46,18 +46,18 @@ class _FaitlurePageState extends State<FaitlurePage> {
                 height: 40.0,
               ),
               Text(
-                'Seu pagamento não foi aprovado. :(',
-                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                'Seu pagamento não foi aprovado.',
+                style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 12.0,
               ),
               Text(
-                'Por favor tente novamente com outro cartão!',
-                style: TextStyle(fontSize: 18.0),
+                'Por favor tente novamente com outro cartão.',
+                style: TextStyle(fontSize: 19.0),
               ),
               SizedBox(
-                height: 20.0,
+                height: 56.0,
               ),
               TextButton(
                 onPressed: () {
@@ -65,7 +65,7 @@ class _FaitlurePageState extends State<FaitlurePage> {
                       arguments: UserPreferencs.getUserName());
                 },
                 child: Text(
-                  'Voltar para Tela Inicial',
+                  'Voltar para tela inicial',
                   style: TextStyle(fontSize: 24.0),
                 ),
               ),

@@ -4,7 +4,7 @@ import 'package:gb_pay_mobile/features/credit_card/pages/credit_card_screen.dart
 import 'package:gb_pay_mobile/features/failure_payment/pages/failure_payment.dart';
 import 'package:gb_pay_mobile/features/greetings/greetings_page.dart';
 import 'package:gb_pay_mobile/features/new_payment/pages/new_payment_screen.dart';
-import 'package:gb_pay_mobile/features/payment/pages/payment_screen.dart';
+import 'package:gb_pay_mobile/features/home/pages/payment_screen.dart';
 import 'package:gb_pay_mobile/features/payment_loading/payment_loading.dart';
 import 'package:gb_pay_mobile/features/payment_location/pages/payment_location_screen.dart';
 import 'package:gb_pay_mobile/features/payment_summary/payment_summary_page.dart';
