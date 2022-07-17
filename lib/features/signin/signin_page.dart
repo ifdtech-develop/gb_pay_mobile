@@ -166,6 +166,7 @@ class _SigninPageState extends State<SigninPage> {
                               UserPreferencs.setToken(value.accessToken);
                               UserPreferencs.setUserName(value.name);
                               UserPreferencs.setUserId(value.id);
+                              UserPreferencs.setUserDocument(value.cpf!);
                               widget.navigator.pushNamed(
                                 AppRouteNames.paymentpage,
                                 arguments: UserPreferencs.getUserName(),

@@ -251,9 +251,6 @@ class _CodeBarPageState extends State<CodeBarPage> {
                   isDense: true,
                 ),
                 textInputAction: TextInputAction.done,
-                onChanged: (text) {
-                  description = descriptionController.text;
-                },
               ),
             ),
             _divider,
@@ -291,6 +288,7 @@ class _CodeBarPageState extends State<CodeBarPage> {
               CodeBarPreferencs.setCodeBar(codeBarEdited);
               CodeBarPreferencs.setCodeBarType(codeBarType.toInt());
               CodeBarPreferencs.setDigitable(codeBarEdited);
+              CodeBarPreferencs.setDescription(descriptionController.text);
               CodeBarPreferencs.setCodeBarOriginal(codeBarController.text);
               widget.navigator.pushNamed(
                 AppRouteNames.newPaymentPage,
@@ -298,18 +296,18 @@ class _CodeBarPageState extends State<CodeBarPage> {
               );
             }).catchError((error) {
               setState(() {
-              isLoading = false;
-            });
-            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  elevation: 0,
-                                  backgroundColor: Colors.transparent,
-                                  content: MessageError(
-                                    text: 'Houve um erro, tente novamente!',
-                                  ),
-                                  duration: Duration(seconds: 3),
-                                ),
-                              );
+                isLoading = false;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  elevation: 0,
+                  backgroundColor: Colors.transparent,
+                  content: MessageError(
+                    text: 'Houve um erro, tente novamente!',
+                  ),
+                  duration: Duration(seconds: 3),
+                ),
+              );
             });
           }
         },
@@ -321,13 +319,13 @@ class _CodeBarPageState extends State<CodeBarPage> {
           elevation: 0,
         ),
         child: const Text(
-                CodeBarText.nextButton,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28.0,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
+          CodeBarText.nextButton,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 28.0,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
       ),
     );
   }

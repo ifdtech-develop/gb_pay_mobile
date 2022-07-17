@@ -11,6 +11,7 @@ import '../../models/paymentCard/paymentCard_model.dart';
 import '../../services/confirm_payment.dart';
 import '../../services/payment_card_dto.dart';
 import '../../services/realize_payment.dart';
+import '../../shared/authentication/auth_preferences.dart';
 import '../../shared/code_bar/code_bar_preferences.dart';
 import '../../shared/credit_card/credit_card_data_preferences.dart';
 import '../../shared/new_payment/new_payment_preferences.dart';
@@ -80,7 +81,8 @@ class _PaymentSummaryPageState extends State<PaymentSummaryPage> {
                 child: Column(
                   children: [
                     FormInputsSummaryTransaction(
-                        title: 'Transação:', dataTitle: 1080025246),
+                        title: 'Transação:',
+                        dataTitle: NewPaymentPreferencs.getTransactionId()),
                     FormInputsSummaryTransaction(
                         title: 'Data de Pagamento:',
                         dataTitle: DateFormat("dd/MM/yyyy").format(data)),
@@ -94,24 +96,29 @@ class _PaymentSummaryPageState extends State<PaymentSummaryPage> {
                     FormInputsSummaryCard(
                         title: 'Pgto. Cartão:',
                         dataTitle:
-                            'R\$ ${CreditCardPreferencs.getAmountDouble()}'),
+                            'R\$ ${CreditCardPreferencs.getAmountDouble()!.toStringAsFixed(2).replaceAll('.', ',')}'),
                     FormInputsSummaryCard(
                         title: 'Valor do boleto:',
                         dataTitle:
-                            'R\$ ${CreditCardPreferencs.getAmountOrigin()?.toString().replaceAll('.', ',')}'),
+                            'R\$ ${CreditCardPreferencs.getAmountOrigin()?.toStringAsFixed(2).replaceAll('.', ',')}'),
                     FormInputsSummaryCard(
                         title: 'Total pago:',
                         dataTitle:
-                            'R\$ ${CreditCardPreferencs.getAmountDouble()}'),
+                            'R\$ ${CreditCardPreferencs.getAmountDouble()!.toStringAsFixed(2).replaceAll('.', ',')}'),
                     SizedBox(
                       height: 28.0,
                     ),
                     FormInputsSummaryDescription(
-                        title: 'Descrição:', dataTitle: 'Descrição do Pgto'),
+                        title: 'Descrição:',
+                        dataTitle: CodeBarPreferencs.getDescription() ??
+                            'Sem descrição'),
                     FormInputsSummaryDescription(
-                        title: 'Vencimento:', dataTitle: 'Não informado'),
+                        title: 'Vencimento:',
+                        dataTitle: NewPaymentPreferencs.getDueDate() ??
+                            'Sem Vencimento'),
                     FormInputsSummaryDescription(
-                        title: 'Beneficiário:', dataTitle: 'Não informado'),
+                        title: 'Beneficiário:',
+                        dataTitle: NewPaymentPreferencs.getAssignor()),
                     FormInputsSummaryDescription(
                         title: 'Pagador:',
                         dataTitle: CreditCardPreferencs.getCardHolder()),
@@ -122,7 +129,7 @@ class _PaymentSummaryPageState extends State<PaymentSummaryPage> {
                     FormInputsSummaryDescription(
                         title: 'Valor do documento:',
                         dataTitle:
-                            'R\$ ${CreditCardPreferencs.getAmountOrigin()?.toString().replaceAll('.', ',')}'),
+                            'R\$ ${CreditCardPreferencs.getAmountOrigin()?.toStringAsFixed(2).replaceAll('.', ',')}'),
                     SizedBox(
                       height: 18.0,
                     ),
@@ -208,27 +215,10 @@ class _PaymentSummaryPageState extends State<PaymentSummaryPage> {
                                     'documentNumber': '76600763000135',
                                   }
                                 };
-
-                                // print(CreditCardPreferencs
-                                //             .getCardHolderDocument()!);
-                                // print(CreditCardPreferencs
-                                //             .getCardHolderDocument()!);
-                                // print(CreditCardPreferencs.getAmountDouble()!);
-                                // print(CreditCardPreferencs.getAmountOrigin()!);
-                                // print(CreditCardPreferencs.getAmountDouble()! - CreditCardPreferencs.getAmountOrigin()!);
-                                // print(CreditCardPreferencs
-                                //             .getCardHolderDocument()!);
-                                // print(CodeBarPreferencs.getCodeBarType()!);
-                                // print(CodeBarPreferencs.getCodeBar()!);
-                                // print(CodeBarPreferencs.getCodeBar()!);
-                                // print(NewPaymentPreferencs.getDueDate()!);
-                                // print(NewPaymentPreferencs.getTransactionId()!);
-                                // print(_paymentCardModel.nsu!);
                               }
                               _paymentCard
                                   .payment(jsonCode)
                                   .then((value) async {
-                                print(_paymentCardModel.nsu);
                                 await _confirmPayment
                                     .payment(
                                         1234,
@@ -247,12 +237,14 @@ class _PaymentSummaryPageState extends State<PaymentSummaryPage> {
                                         data,
                                         NewPaymentPreferencs
                                             .getTransactionId()!)
-                                    .then((value1) => Navigator.pushNamed(
-                                        context, AppRouteNames.receipt,
-                                        arguments: value1));
-                              }).catchError((error) {
-                                Navigator.pushNamed(
-                                    context, AppRouteNames.failurePayment);
+                                    .then((value1) {
+                                  Navigator.pushNamed(
+                                      context, AppRouteNames.receipt,
+                                      arguments: value1);
+                                }).catchError((error) {
+                                  Navigator.pushNamed(
+                                      context, AppRouteNames.failurePayment);
+                                });
                               });
                             }
 

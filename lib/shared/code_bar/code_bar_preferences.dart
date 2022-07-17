@@ -7,6 +7,7 @@ class CodeBarPreferencs {
   static const _keyDigitable = 'digitable';
   static const _keyCodeBarType = 'codeBarType';
   static const _keyCodeBarOriginal = 'codeBarOriginal';
+  static const _keyDescription = 'description';
 
   static Future init() async =>
       _preferences = await SharedPreferences.getInstance();
@@ -20,11 +21,16 @@ class CodeBarPreferencs {
   static Future setCodeBarType(int codeBarType) async =>
       await _preferences.setInt(_keyCodeBarType, codeBarType);
 
-static Future setCodeBarOriginal(String codeBarOriginal) async =>
+  static Future setDescription(String description) async =>
+      await _preferences.setString(_keyDescription, description);
+
+  static Future setCodeBarOriginal(String codeBarOriginal) async =>
       await _preferences.setString(_keyCodeBarOriginal, codeBarOriginal);
 
   static String? getCodeBar() => _preferences.getString(_keyCodeBar);
   static String? getDigitable() => _preferences.getString(_keyDigitable);
   static int? getCodeBarType() => _preferences.getInt(_keyCodeBarType);
-  static String? getCodeBarOriginal() => _preferences.getString(_keyCodeBarOriginal);
+  static String? getCodeBarOriginal() =>
+      _preferences.getString(_keyCodeBarOriginal);
+  static String? getDescription() => _preferences.getString(_keyDescription);
 }

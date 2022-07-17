@@ -6,6 +6,7 @@ class UserPreferencs {
   static const _keyToken = 'token';
   static const _keyUserName = 'userName';
   static const _keyUserId = 'userId';
+  static const _keyUserDocument = 'userDocument';
 
   static Future init() async =>
       _preferences = await SharedPreferences.getInstance();
@@ -19,8 +20,11 @@ class UserPreferencs {
   static Future setUserId(int? id) async =>
       await _preferences.setString(_keyUserId, id.toString());
 
+  static Future setUserDocument(String userDocument) async =>
+      await _preferences.setString(_keyUserDocument, userDocument);
+
   static String? getToken() => _preferences.getString(_keyToken);
   static String? getUserName() => _preferences.getString(_keyUserName);
   static String? getId() => _preferences.getString(_keyUserId);
-
+  static String? getUserDocument() => _preferences.getString(_keyUserDocument);
 }

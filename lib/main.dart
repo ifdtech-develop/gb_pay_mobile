@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gb_pay_mobile/constants/routes.dart';
 import 'package:gb_pay_mobile/features/not_found/pages/not_found_screen.dart';
+import 'package:gb_pay_mobile/shared/authentication/auth_preferences.dart';
 import 'package:gb_pay_mobile/shared/code_bar/code_bar_preferences.dart';
 import 'package:gb_pay_mobile/shared/confirm_payment/confirm_payment_preferences.dart';
 import 'package:gb_pay_mobile/shared/credit_card/credit_card_data_preferences.dart';
@@ -23,6 +24,7 @@ void main() async {
   await NewPaymentPreferencs.init();
   await ConfirmPaymentPreferencs.init();
   await SummaryPreferencs.init();
+  await AuthPreferencs.init();
   runApp(const GbPayApp());
 }
 

@@ -6,7 +6,9 @@ import 'package:gb_pay_mobile/util/screen.dart';
 import 'package:intl/intl.dart';
 
 import '../../../models/confirm_payment/confirm_payment_model.dart';
+import '../../../models/paymentCard/paymentCard_model.dart';
 import '../../../services/confirm_payment.dart';
+import '../../../shared/authentication/auth_preferences.dart';
 import '../../../shared/code_bar/code_bar_preferences.dart';
 import '../../../shared/confirm_payment/confirm_payment_preferences.dart';
 import '../../../shared/credit_card/credit_card_data_preferences.dart';
@@ -81,7 +83,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
                       TitleWidget(text: ReceiptScreenText.titulo1),
                       ValueWidget(
                         text: CreditCardPreferencs.getAmountDouble()!
-                            .toString()
+                            .toStringAsFixed(2)
                             .replaceAll('.', ','),
                       ),
                       TitleWidget(text: ReceiptScreenText.valorOriginal),
@@ -123,7 +125,8 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
 
                       TitleWidget(text: 'Vencimento'),
                       ValueWidget(
-                        text: 'Não informado',
+                        text: NewPaymentPreferencs.getDueDate() ??
+                            'Não informado',
                       ),
                       SubTitleWidget(text: ReceiptScreenText.cpfText),
                       ValueWidget(
@@ -131,16 +134,22 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
                               .getCardHolderDocumentUnformated()),
                       TitleWidget(text: 'Autenticação bancária'),
                       ValueWidget(
-                        text: '${widget.realizePayment.authentication}',
+                        text: '97f529ac-43ab-4be3-9fe7-815e50ef6d79',
                       ),
 
                       TitleWidget(text: 'Comprovante do Cartão'),
                       ValueWidget(
-                        text: '${widget.realizePayment.authenticationApi}',
+                        text: '97f529ac-43ab-4be3-9fe7-815e50ef6d79',
                       ),
 
                       SubTitleWidget(text: ReceiptScreenText.agenciaText),
-                      ValueWidget(text: ReceiptScreenText.agenciaValue),
+                      ValueWidget(
+                          text: widget.realizePayment.convenant ??
+                              widget.realizePayment.convenant.split(' ')[1] +
+                                  ' / ' +
+                                  '0 / ' +
+                                  widget.realizePayment.convenant
+                                      .split(' ')[4]),
                       SubTitleWidget(text: ReceiptScreenText.nsuText),
                       ValueWidget(text: '21212'),
                       SubTitleWidget(text: ReceiptScreenText.codigoText),

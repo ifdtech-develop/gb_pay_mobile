@@ -23,15 +23,15 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
   String dateCalendar = '';
   TextEditingController dateController = TextEditingController();
   String dataVencimento = '';
+  DateTime dataVencimentoFormatted = DateTime.now();
   DateTime data = DateTime.now();
- 
 
   @override
   void initState() {
     super.initState();
     dateController.addListener(() {
       dateCalendar = DateTime.now().toString();
-       
+
       //code = arguments['/codeBarPage'];
     });
   }
@@ -44,10 +44,17 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-    dataVencimento = widget.ticketInfo.dueDate!;
-    // DateTime parse(dataVencimento);
+    if (widget.ticketInfo.dueDate == null) {
+      dataVencimento = widget.ticketInfo.dueDate ?? 'Sem Vencimento';
+    } else {
+      dataVencimento = dataVencimento.replaceAll('T00:00:00Z', '');
+      dataVencimento = dataVencimento.split('-')[2] +
+          '/' +
+          dataVencimento.split('-')[1] +
+          '/' +
+          dataVencimento.split('-')[0];
+    }
 
-       dataVencimento = dataVencimento.replaceAll('T00:00:00Z', '');
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -123,7 +130,7 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
                     top: 8.0,
                   ),
                   child: Text(
-                    'R\$ ${widget.ticketInfo.value.toString().replaceAll('.', ',')}',
+                    'R\$ ${widget.ticketInfo.value!.toStringAsFixed(2).replaceAll('.', ',')}',
                     style: const TextStyle(
                       color: ColorsProject.green,
                       fontWeight: FontWeight.bold,
@@ -138,7 +145,6 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
       ),
     );
   }
-
 
   Widget get _mountInfoPage {
     return Column(
@@ -206,9 +212,12 @@ class _NewPaymentPageState extends State<NewPaymentPage> {
           onPressed: () {
             print(widget.ticketInfo.value);
             NewPaymentPreferencs.setAssignor(widget.ticketInfo.assignor);
-            NewPaymentPreferencs.setTransactionId(widget.ticketInfo.transactionId);
-            NewPaymentPreferencs.setDueDate(widget.ticketInfo.dueDate);
-            Navigator.pushNamed(context, AppRouteNames.creditcard, arguments: widget.ticketInfo.value);
+            NewPaymentPreferencs.setTransactionId(
+                widget.ticketInfo.transactionId);
+            NewPaymentPreferencs.setDueDate(dataVencimento);
+            NewPaymentPreferencs.setDueDateFormatted(dataVencimentoFormatted);
+            Navigator.pushNamed(context, AppRouteNames.creditcard,
+                arguments: widget.ticketInfo.value);
           },
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
