@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gb_pay_mobile/features/code_bar/pages/code_bar.dart';
 import 'package:gb_pay_mobile/features/credit_card/pages/credit_card_screen.dart';
+import 'package:gb_pay_mobile/features/failure_payment/pages/failure_payment.dart';
 import 'package:gb_pay_mobile/features/greetings/greetings_page.dart';
 import 'package:gb_pay_mobile/features/new_payment/pages/new_payment_screen.dart';
 import 'package:gb_pay_mobile/features/payment/pages/payment_screen.dart';
@@ -37,8 +38,9 @@ class AppRouteNames {
   static const String receipt = '/receipt';
   static const String statement = '/statement';
   static const String paymentSummary = '/paymentSummary';
-  static const String perfilUser = 'perfilUser';
-  static const String loadingPayment = 'loadingPayment';
+  static const String perfilUser = '/perfilUser';
+  static const String loadingPayment = '/loadingPayment';
+  static const String failurePayment = '/failurePayment';
 }
 
 class AppRoutes {
@@ -65,5 +67,6 @@ class AppRoutes {
     AppRouteNames.paymentSummary: (_) => const PaymentSummaryPage(),
     AppRouteNames.perfilUser: (_) => const PerfilUserPage(),
     AppRouteNames.loadingPayment: (_) => PaymentLoadingPage(),
+    AppRouteNames.failurePayment: (_) => FaitlurePage(),
   };
 }

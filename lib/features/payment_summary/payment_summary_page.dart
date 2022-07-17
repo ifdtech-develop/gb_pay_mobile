@@ -162,7 +162,8 @@ class _PaymentSummaryPageState extends State<PaymentSummaryPage> {
                                   'payment': {
                                     'documentNumber': CreditCardPreferencs
                                         .getCardHolderDocument(),
-                                    'amount': CreditCardPreferencs.getAmount()!*100,
+                                    'amount':
+                                        CreditCardPreferencs.getAmount()! * 100,
                                     'installments':
                                         CreditCardPreferencs.getInstallments(),
                                   },
@@ -196,7 +197,8 @@ class _PaymentSummaryPageState extends State<PaymentSummaryPage> {
                                   'payment': {
                                     'documentNumber': CreditCardPreferencs
                                         .getCardHolderDocument(),
-                                    'amount': CreditCardPreferencs.getAmount()!*100,
+                                    'amount':
+                                        CreditCardPreferencs.getAmount()! * 100,
                                   },
                                   'customer': {
                                     'firstName':
@@ -206,7 +208,7 @@ class _PaymentSummaryPageState extends State<PaymentSummaryPage> {
                                     'documentNumber': '76600763000135',
                                   }
                                 };
-                                
+
                                 // print(CreditCardPreferencs
                                 //             .getCardHolderDocument()!);
                                 // print(CreditCardPreferencs
@@ -221,15 +223,15 @@ class _PaymentSummaryPageState extends State<PaymentSummaryPage> {
                                 // print(CodeBarPreferencs.getCodeBar()!);
                                 // print(NewPaymentPreferencs.getDueDate()!);
                                 // print(NewPaymentPreferencs.getTransactionId()!);
-                               // print(_paymentCardModel.nsu!);
+                                // print(_paymentCardModel.nsu!);
                               }
                               _paymentCard
                                   .payment(jsonCode)
                                   .then((value) async {
-                                    print( _paymentCardModel.nsu);
+                                print(_paymentCardModel.nsu);
                                 await _confirmPayment
                                     .payment(
-                                       1234,
+                                        1234,
                                         CreditCardPreferencs
                                             .getCardHolderDocument()!,
                                         CreditCardPreferencs
@@ -243,12 +245,15 @@ class _PaymentSummaryPageState extends State<PaymentSummaryPage> {
                                         CodeBarPreferencs.getCodeBar()!,
                                         CodeBarPreferencs.getCodeBar()!,
                                         data,
-                                         NewPaymentPreferencs.getTransactionId()!)
+                                        NewPaymentPreferencs
+                                            .getTransactionId()!)
                                     .then((value1) => Navigator.pushNamed(
                                         context, AppRouteNames.receipt,
                                         arguments: value1));
-                              }
-                              );
+                              }).catchError((error) {
+                                Navigator.pushNamed(
+                                    context, AppRouteNames.failurePayment);
+                              });
                             }
 
                             await Future.delayed(Duration(seconds: 4));
