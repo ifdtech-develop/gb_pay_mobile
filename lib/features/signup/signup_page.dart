@@ -146,12 +146,12 @@ class _SignupPageState extends State<SignupPage> {
                                     emailController.text,
                                     addressController.text)
                                 .then((value) {
-                              _setUser(nameController.text, emailController.text,
-                                  documentEdited);
+                              _setUser(nameController.text,
+                                  emailController.text, documentEdited);
                             }).catchError((error) {
                               setState(() {
-                              isLoading = true;
-                            });
+                                isLoading = false;
+                              });
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   elevation: 0,
@@ -166,12 +166,12 @@ class _SignupPageState extends State<SignupPage> {
                           await Future.delayed(Duration(seconds: 3));
                         },
                         child: const Text(
-                                SignupPageText.continueButton,
-                                style: TextStyle(
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                          SignupPageText.continueButton,
+                          style: TextStyle(
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                     DividerWidget(

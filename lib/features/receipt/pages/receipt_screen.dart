@@ -14,9 +14,7 @@ import '../../../shared/new_payment/new_payment_preferences.dart';
 
 class ReceiptScreen extends StatefulWidget with Screen {
   final ConfirmPaymentModel realizePayment;
-  ReceiptScreen({
-    Key? key, required this.realizePayment
-  }) : super(key: key);
+  ReceiptScreen({Key? key, required this.realizePayment}) : super(key: key);
 
   @override
   State<ReceiptScreen> createState() => _ReceiptScreenState();
@@ -33,11 +31,12 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
   DateTime data = DateTime.now();
   late int paymentStatus;
   late ConfirmPaymentDTO confirm = ConfirmPaymentDTO();
-  
 
   void initState() {
     paymentStatus = widget.realizePayment.transactionId;
-  confirm.confirmPayment(1234, paymentStatus);
+    confirm.confirmPayment(1234, paymentStatus);
+    CreditCardPreferencs.setCardNumber('');
+    CreditCardPreferencs.setCardHolderDocument('');
     super.initState();
   }
 
@@ -96,8 +95,9 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
                         children: [
                           if (CreditCardPreferencs.getInstallments() == 1) ...[
                             ValueWidget(
-                              text: '${CreditCardPreferencs.getInstallments()}' ??
-                                  'A vista',
+                              text:
+                                  '${CreditCardPreferencs.getInstallments()}' ??
+                                      'A vista',
                             ),
                           ] else ...[
                             ValueWidget(
@@ -131,12 +131,12 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
                               .getCardHolderDocumentUnformated()),
                       TitleWidget(text: 'Autenticação bancária'),
                       ValueWidget(
-                        text: 'fa98b263-4488-4f32',
+                        text: '${widget.realizePayment.authentication}',
                       ),
 
                       TitleWidget(text: 'Comprovante do Cartão'),
                       ValueWidget(
-                        text: 'fa98b263-4488-4f32',
+                        text: '${widget.realizePayment.authenticationApi}',
                       ),
 
                       SubTitleWidget(text: ReceiptScreenText.agenciaText),
