@@ -22,6 +22,7 @@ class PaymentPage extends StatefulWidget with Screen {
 class _PaymentPageState extends State<PaymentPage> {
   String data = "";
   final TicketQueryDTO _ticketQueryDTO = TicketQueryDTO();
+  String firstName = '';
 
   Future scanCodeBar() async {
     String code = await FlutterBarcodeScanner.scanBarcode(
@@ -57,6 +58,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
+    firstName = widget.user.split(" ")[0].toString();
     return Scaffold(
       endDrawer: const DrawerGBPay(),
       appBar: AppBar(
@@ -82,7 +84,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 padding: const EdgeInsets.only(top: 88.0),
                 child: Center(
                   child: Text(
-                    'Olá, ' + widget.user,
+                    'Olá, ' + firstName,
                     style: const TextStyle(
                       color: ColorsProject.blueWhite,
                       fontSize: 30.0,
